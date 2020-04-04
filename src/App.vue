@@ -110,9 +110,10 @@
 		}
 	};
 </script>
-<style >
+<style>
 	@import url("https://fonts.googleapis.com/css?family=Roboto+Slab:400,500,700|Ubuntu:400,500,700&display=swap");
 	@import url("https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,600,700&display=swap");
+	@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,500,700&display=swap');
 
 	/** Globals */
 	* {

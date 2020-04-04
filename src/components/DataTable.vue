@@ -107,6 +107,8 @@
 	body {
 		font-family: Helvetica Neue, Arial, sans-serif;
 		font-size: 13px;
+		font-family: 'Noto Sans JP', sans-serif;
+
 		color: rgb(53, 53, 53);
     }
 
@@ -117,50 +119,70 @@
         padding-top: 0;
 		/* display: flex; */
         /* flex-direction: column; */
-        margin: auto;
+		margin: auto;
+
         /* display: grid;
 
         gap: 5px; */
 	}
     .search {
         margin-bottom: 5px;
-        border-radius: 10px;
+		border-radius: 10px;
+		display: flex;
+		justify-content: left;
+		padding: 5px;
     }
     .search>input {
         border-radius: 5px;
-        padding-left: 5px;
+		padding: 0px 0px 0px 4px;
+		margin-left: 10px;
+		font-size: 15px;
     }
 
 	table {
-		border: 2px solid #42b983;
-		border-radius: 3px;
-		background-color: #fff;
-		max-height: 400px;
-		padding: 5px;
+		border: 2px solid #40487a ;
+		border-radius: 6px;
+		background: #fff;
+		/* padding: 5px; */
+
 	}
 
 	th {
-		background-color: #353535;
+		background: #40487a;
 		color: rgba(255, 255, 255, 0.66);
 		cursor: pointer;
-		font-size: 12px;
+		font-size: 13px;
 		-webkit-user-select: none;
+		/* font-weight: 500; */
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+		/* height: 50px; */
+		font-family: 'Noto Sans JP', sans-serif;
+		border-bottom: 2px solid #363538c7;
 	}
 
 	td {
-		color: rgb(114, 114, 114);
+		box-sizing: border-box;
+		color: rgb(129, 127, 127);
 		background-color: #f9f9f9;
 		text-shadow: none;
+		/* font-family: 'Ubuntu', sans-serif;
+		font-family: 'Montserrat Alternates', sans-serif; */
+		font-family: 'Noto Sans JP', sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		padding: 10px 5px;
+
+
+
 	}
 
-	th,
-	td {
-		min-width: 75px;
-		max-width: 100px;
-		padding: 10px 9px;
+	th {
+		max-width: 110px;
+		/* width: fit-content; */
+		padding: 15px 7px;
+		min-width: fit-content;
 	}
 
 	th.active {
@@ -191,4 +213,13 @@
 		border-right: 4px solid transparent;
 		border-top: 4px solid #fff;
 	}
+
+@media screen and (max-width: 500px) {
+	table {
+		max-width: 98vw;
+	}
+
+}
+
+
 </style>
