@@ -55,7 +55,7 @@ const formatDateData = dateData => {
 }
 
 document.querySelector('#submitButton')
-    .addEventListener('click', e => {
+    .addEventListener('click', () => {
         // convertData()
         covidFetch();
 
