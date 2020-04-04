@@ -3,37 +3,41 @@
 		id="app"
 		class="body"
 	>
-<header class="masthead mb-auto">
-				<div class="inner">
-					<h3 class="masthead-brand">COVID-19 APP</h3>
-					<nav class="nav nav-masthead justify-content-center">
-						<a
-							class="nav-link active"
-							href="#"
-						>Home</a>
-						<a
-							class="nav-link"
-							href="#"
-						>Features</a>
-						<a
-							class="nav-link"
-							href="#"
-						>About</a>
-					</nav>
-				</div>
-			</header>
-		<div id="nav">
-			<router-link to="/">Home</router-link> |
-			<router-link to="/about">About</router-link>
-		</div>
-		<router-view  :queriedDates="queriedDates" @queryClicked="covidFetch"/>
+		<header class="masthead mb-auto app-header">
+			<div class="inner">
+				<h3 class="masthead-brand">COVID-19 APP</h3>
+				<nav class="nav nav-masthead justify-content-center">
+					<a
+						class="nav-link active"
+						href="#"
+					>Home</a>
+					<a
+						class="nav-link"
+						href="#"
+					>Features</a>
+					<a
+						class="nav-link"
+						href="#"
+					>About</a>
+				</nav>
 
-			<footer class="mastfoot mt-auto">
-				<div class="inner">
-					<p><a href="https://hamilsauce.github.io">SEAHAG</a>2020</p>
-				</div>
-				</footer>
-	<!--
+			</div>
+			<div id="nav">
+				<router-link to="/">Home</router-link> |
+				<router-link to="/about">About</router-link>
+			</div>
+		</header>
+		<router-view
+			:queriedDates="queriedDates"
+			@queryClicked="covidFetch"
+		/>
+
+		<footer class="mastfoot mt-auto">
+			<div class="inner">
+				<p><a href="https://hamilsauce.github.io">SEAHAG</a>2020</p>
+			</div>
+		</footer>
+		<!--
 	<div
 			class="dataDisplay"
 			v-if="displayData"
@@ -68,9 +72,9 @@
 		},
 		data() {
 			return {
-        displayData:'',
+				displayData: "",
 				searchQuery: "",
-				gridColumns: ['date', 'confirmed', 'deaths', 'recovered'],
+				gridColumns: ["date", "confirmed", "deaths", "recovered"],
 				gridData: [
 					{ name: "Chuck Norris", power: Infinity },
 					{ name: "Bruce Lee", power: 9000 },
@@ -82,7 +86,6 @@
 		},
 		methods: {
 			covidFetch() {
-
 				this.displayData = true;
 				fetch("https://covidapi.info/api/v1/country/USA")
 					.then(res => res.json())
@@ -94,7 +97,7 @@
 								let latestDate = new Date(
 									`${month}/${day}/${year}`
 								).toLocaleDateString();
-								details['date'] = latestDate;
+								details["date"] = latestDate;
 								return details;
 							}
 						);
@@ -139,21 +142,24 @@
 
 	/** Base structure */
 	html,
-	#app  {
+	#app {
 		height: 100vh;
 		background-color: rgb(42, 42, 42);
+
 	}
-#app {
-	padding: 0;
-	margin: 0;
-	overflow: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	margin: auto;
-	text-align: center;
-}
-	#app  {
+	#app {
+		padding: 0;
+		margin: auto;
+		overflow: auto;
+		/* display: flex;
+		flex-direction: column;
+		justify-content: space-between; */
+		display: grid;
+		gap: 10px;
+		margin: auto;
+		text-align: center;
+	}
+	#app {
 		color: #fff;
 		text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
 		box-shadow: inset 0 0 6em rgba(0, 0, 0, 0.555);
@@ -164,6 +170,12 @@
 		/* max-width: 42em; */
 		display: flex;
 		justify-content: space-between;
+	}
+	.app-header {
+		margin-bottom: 15px;
+	}
+	nav {
+		margin-bottom: 15px;
 	}
 
 	.masthead-brand {

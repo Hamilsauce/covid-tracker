@@ -1,5 +1,12 @@
 <template>
 	<div class="table-container">
+		<form class="search" @submit.prevent="">
+			Search <input
+				name="query"
+
+				v-model="searchQuery"
+			>
+		</form>
 		<table>
 			<thead>
 				<tr>
@@ -42,7 +49,7 @@
 		props: {
 			heroes: Array,
 			columns: Array,
-			filterKey: String
+			// searchQuery: String
 		},
 		data() {
 			let sortOrders = {};
@@ -51,7 +58,8 @@
 			});
 			return {
 				sortKey: "",
-				sortOrders: sortOrders
+				sortOrders: sortOrders,
+				searchQuery: ""
 			};
 		},
 		methods: {
@@ -63,16 +71,16 @@
 		computed: {
 			filteredHeroes() {
 				let sortKey = this.sortKey;
-				let filterKey = this.filterKey && this.filterKey.toLowerCase();
+				let searchQuery = this.searchQuery && this.searchQuery.toLowerCase();
 				let order = this.sortOrders[sortKey] || 1;
 				let heroes = this.heroes;
-				if (filterKey) {
+				if (searchQuery) {
 					heroes = heroes.filter(row => {
 						return Object.keys(row).some(key => {
 							return (
 								String(row[key])
 									.toLowerCase()
-									.indexOf(filterKey) > -1
+									.indexOf(searchQuery) > -1
 							);
 						});
 					});
@@ -101,10 +109,26 @@
 		font-size: 13px;
 		color: rgb(53, 53, 53);
     }
-    .table-container {
-        position: relative;
-        display: flex;
 
+	.table-container {
+        position: relative;
+        height: 100%;
+        min-height: 100vw;
+        padding-top: 0;
+		/* display: flex; */
+        /* flex-direction: column; */
+        margin: auto;
+        /* display: grid;
+
+        gap: 5px; */
+	}
+    .search {
+        margin-bottom: 5px;
+        border-radius: 10px;
+    }
+    .search>input {
+        border-radius: 5px;
+        padding-left: 5px;
     }
 
 	table {
@@ -112,13 +136,14 @@
 		border-radius: 3px;
 		background-color: #fff;
 		max-height: 400px;
+		padding: 5px;
 	}
 
 	th {
 		background-color: #353535;
 		color: rgba(255, 255, 255, 0.66);
-        cursor: pointer;
-        font-size: 12px;
+		cursor: pointer;
+		font-size: 12px;
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;

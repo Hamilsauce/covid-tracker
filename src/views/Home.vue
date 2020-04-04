@@ -4,7 +4,7 @@
     <DataTable
         :heroes="queriedDates"
         :columns="gridColumns"
-        :filter-key="searchQuery"
+
         v-if="queryActive"
     />
   </div>
@@ -28,7 +28,7 @@ export default {
 			return {
         displayData:'',
         country: '',
-        searchQuery: "",
+
         queryActive: false,
 				gridColumns: ['date', 'confirmed', 'deaths', 'recovered'],
 				gridData: [
@@ -68,6 +68,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   /* padding: 50px; */
-
+  height: 100%;
 }
 </style>
