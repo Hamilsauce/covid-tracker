@@ -14,11 +14,11 @@ const covidFetch = () => {
         .then(res => res.json())
         .then(data => {
             const innerCover = document.querySelector('.inner.cover');
-            let [date, detaills] = Object.entries(data.result).pop();
+            let [date, details] = Object.entries(data.result).pop();
             let [year, month, day] = date.split("-");
 
             let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-            let covidData = formatDateData(detaills);
+            let covidData = formatDateData(details);
 
             innerCover.classList.add('collapsed');
             setTimeout(() => {

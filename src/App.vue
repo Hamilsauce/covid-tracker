@@ -1,339 +1,293 @@
 <template>
-	<div
-		id="app"
-		class="body"
-	>
-		<header class="masthead mb-auto app-header">
-			<div class="inner">
-				<h3 class="masthead-brand">COVID-19 APP</h3>
-				<nav class="nav nav-masthead justify-content-center">
-					<a
-						class="nav-link active"
-						href="#"
-					>Home</a>
-					<a
-						class="nav-link"
-						href="#"
-					>Features</a>
-					<a
-						class="nav-link"
-						href="#"
-					>About</a>
+	<div id="app" class="app">
+		<main class="app-body">
+			<header class="app-header masthead mb-auto">
+				<div class="inner">
+					<h3 class="masthead-brand">COVID-19 APP</h3>
+				</div>
+				<nav id="nav" class="nav nav-masthead justify-content-center">
+					<router-link to="/" class="nav-link active">Home</router-link>
+					<router-link to="/features" class="nav-link">Features</router-link>
+					<router-link to="/about" class="nav-link">About</router-link>
 				</nav>
-
+			</header>
+			<div class="app-content">
+				<router-view :queryResults="queryResults" @queryRequested="dataFetch" />
 			</div>
-			<div id="nav">
-				<router-link to="/">Home</router-link> |
-				<router-link to="/about">About</router-link>
-			</div>
-		</header>
-		<router-view
-			:queriedDates="queriedDates"
-			@queryClicked="covidFetch"
-		/>
-
-		<footer class="mastfoot mt-auto">
-			<div class="inner">
-				<p><a href="https://hamilsauce.github.io">SEAHAG</a>2020</p>
-			</div>
-		</footer>
-		<!--
-	<div
-			class="dataDisplay"
-			v-if="displayData"
-			:class="{ show: displayData }"
-		>
-			<form id="search">
-				Search <input
-					name="query"
-					v-model="searchQuery"
-				>
-			</form>
-			<data-table
-				:heroes="queriedDates"
-				:columns="gridColumns"
-				:filter-key="searchQuery"
-			>
-			</data-table>
-		</div>
-		</footer> -->
-
+			<footer class="mastfoot mt-auto">
+				<div class="inner">
+					<p><a href="https://hamilsauce.github.io">SEAHAG</a>2020</p>
+				</div>
+			</footer>
+		</main>
 	</div>
-
 </template>
 
 <script>
-	// import DataTable from "./components/DataTable";
+// import DataTable from "./components/DataTable";
+// import EventBus from "./components/eventBus.js";
 
-	export default {
-		name: "app",
-		components: {
-			// DataTable
-		},
-		data() {
-			return {
-				displayData: "",
-				searchQuery: "",
-				gridColumns: ["date", "confirmed", "deaths", "recovered"],
-				gridData: [
-					{ name: "Chuck Norris", power: Infinity },
-					{ name: "Bruce Lee", power: 9000 },
-					{ name: "Jackie Chan", power: 7000 },
-					{ name: "Jet Li", power: 8000 }
-				],
-				queriedDates: []
-			};
-		},
-		methods: {
-			covidFetch() {
-				this.displayData = true;
-				fetch("https://covidapi.info/api/v1/country/USA")
-					.then(res => res.json())
-					.then(data => {
-						// let [date, details]
-						let cleanedData = Object.entries(data.result).map(
-							([date, details]) => {
-								let [year, month, day] = date.split("-");
-								let latestDate = new Date(
-									`${month}/${day}/${year}`
-								).toLocaleDateString();
-								details["date"] = latestDate;
-								return details;
-							}
-						);
-						this.queriedDates = cleanedData;
-					})
-					.catch(err => {
-						console.log(err);
-					});
+export default {
+	name: "app",
+	components: {
+		// EventBus
+		// DataTable
+	},
+	data() {
+		return {
+			// TODO Movie queryBuilder to future data view
+			queryBuilder: {
+				baseUrl: "https://covidapi.info/api/v1",
+				selectedCountry: "",
+				globalTotals: "",
+				countryTotal: `country/${this.selectedCountry}/latest`
+			},
+			displayData: "",
+			searchQuery: "",
+			gridColumns: ["date", "confirmed", "deaths", "recovered"],
+			queryResults: []
+		};
+	},
+	methods: {
+		dataFetch(params) {
+			if (params == 'latest-date') {
+				console.log('latest-date query');
+			} else {
+				let url = `${this.queryBuilder.baseUrl}/${params}`;
+			this.bigFetch(url);
 			}
+			console.log(params);
+		},
+		async bigFetch(url) {
+			console.log(url);
+			this.displayData = true;
+			fetch("https://covidapi.info/api/v1/country/USA")
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+					this.queryResults = Object.entries(data.result);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		},
+		// simpleFetch(url) {
+		// 	console.log(url);
+		// 	fetch(url)
+		// 		.then(res => res.json())
+		// 		.then(data => {
+		// 			console.log('data');
+		// 			console.log(data);
+		// 			let date = this.fixDates(data.date);
+		// 			let cleanedData =
+		// 				Object.entries(data.result)
+		// 					.filter(prop=> {
+		// 						return prop[0]  == 'date' || prop[0]  == 'result'
+		// 					}).map(([prop, val]) => {
+		// 						let newProp = prop.charAt(0).toUpperCase() + prop.slice(1);
+		// 						let newVal = Number(val).toLocaleString();
+		// 						return [newPropm, newVal]
+		// 					}).reduce((acc, curr) => {
+		// 						let list = acc += curr;
+		// 						return list;
+		// 					}, );
+		// 			);
+		// 			this.queryResults = cleanedData;
+		// 		})
+		// 		.catch(err => {
+		// 			console.log(err);
+		// 		});
+		// },
+		fixDates(date) {
+			let [year, month, day] = date.split("-");
+			let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+			return latestDate;
 		}
-	};
+	}
+};
 </script>
+
 <style>
-	@import url("https://fonts.googleapis.com/css?family=Roboto+Slab:400,500,700|Ubuntu:400,500,700&display=swap");
-	@import url("https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,600,700&display=swap");
-	@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,500,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto+Slab:400,500,700|Ubuntu:400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,500,700&display=swap");
 
-	/** Globals */
-	* {
-		font-family: "Roboto Slab", serif;
-		font-family: "Montserrat Alternates", sans-serif;
-	}
+/** Globals */
+* {
+	font-family: "Roboto Slab", serif;
+	font-family: "Montserrat Alternates", sans-serif;
+}
 
-	/* Links */
-	a,
-	a:focus,
-	a:hover {
-		color: #fff;
-	}
+/* Links */
+a,
+a:focus,
+a:hover {
+	color: #fff;
+}
 
-	/* Custom default button */
-	.btn-secondary,
-	.btn-secondary:hover,
-	.btn-secondary:focus {
-		text-shadow: none;
-		/* Prevent inheritance from `body` */
-		background-color: rgb(75, 54, 105);
-		border: 0.05rem solid rgba(255, 255, 255, 0.671);
-		font-family: "Ubuntu", sans-serif;
-		color: rgb(214, 214, 214);
-		font-weight: 400;
-	}
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+	text-shadow: none;
+	background-color: rgb(75, 54, 105);
+	border: 0.05rem solid rgba(255, 255, 255, 0.671);
+	font-family: "Ubuntu", sans-serif;
+	color: rgb(214, 214, 214);
+	font-weight: 400;
+}
 
-	/** Base structure */
-	html,
-	#app {
-		height: 100vh;
-		background-color: rgb(42, 42, 42);
+/** Base structure */
+html {
+	height: 100vh;
+	background-color: rgb(42, 42, 42);
+}
+.app {
+	height: 100vh;
+	max-width: auto;
+	padding: 0;
+	margin: auto;
+	padding: 0;
+	margin: auto;
+	text-align: center;
+	color: #fff;
+	background-color: rgb(42, 42, 42);
+	text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
+	box-shadow: inset 0 0 6em rgba(0, 0, 0, 0.555);
+	overflow: auto;
+}
+.app-body {
+	display: grid;
+	gap: 10px;
+	grid-template-rows: 1fr 8fr 1fr;
+	height: 100vh;
+	max-width: 700px;
+	padding: 0;
+	margin: auto;
+	text-align: center;
+	color: #fff;
+	text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
+	overflow: auto;
+}
+/* new */
+.cover-container {
+	display: flex;
+	justify-content: space-between;
+}
+.app-header {
+	margin: 5px 0px 15px 0px;
+}
+nav {
+	margin-bottom: 15px;
+}
 
-	}
-	#app {
-		padding: 0;
-		margin: auto;
-		overflow: auto;
-		/* display: flex;
-		flex-direction: column;
-		justify-content: space-between; */
-		display: grid;
-		gap: 10px;
-		margin: auto;
-		text-align: center;
-	}
-	#app {
-		color: #fff;
-		text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
-		box-shadow: inset 0 0 6em rgba(0, 0, 0, 0.555);
-	}
+.masthead-brand {
+	font-weight: 400;
+	font-size: 1.6em;
+	color: rgba(221, 221, 221, 0.938);
+	font-family: "Ubuntu", sans-serif;
+}
 
-	/* new */
-	.cover-container {
-		/* max-width: 42em; */
-		display: flex;
-		justify-content: space-between;
-	}
-	.app-header {
-		margin-bottom: 15px;
-	}
-	nav {
-		margin-bottom: 15px;
-	}
+.inner.cover {
+	/** */
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	/* height: 215px; */
+	overflow: hidden;
+	transform: 0.75s;
+	transition: height 0.75s, opacity 0.75s;
+}
+.inner.cover.collapsed {
+	opacity: 0;
+	/* height: 0px; */
+	overflow: hidden;
+	transform: 0.75s;
+	transition: height 1s, opacity 0.8s;
+}
+.cover-heading {
+	margin-bottom: 3px;
+	font-weight: 400;
+	letter-spacing: 0.05em;
+	font-size: 2.3em;
+	font-family: "Ubuntu", sans-serif;
+}
+.cover-text {
+	margin-bottom: 10px;
+	color: rgb(228, 228, 228);
+	font-size: 1.2rem;
+}
 
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@media (min-width: 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+/* end new */
+
+/* * Header*/
+.masthead {
+	margin-bottom: 2rem;
+	display: block;
+}
+
+.masthead-brand {
+	margin-bottom: 0;
+}
+
+.nav-masthead .nav-link {
+	padding: 0.25rem 0;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.5);
+	background-color: transparent;
+	border-bottom: 0.25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+	border-bottom-color: rgba(255, 255, 255, 0.25);
+}
+
+.nav-masthead .nav-link + .nav-link {
+	margin-left: 1rem;
+}
+
+.nav-masthead .active {
+	color: #fff;
+	border-bottom-color: #fff;
+}
+
+@media (min-width: 48em) {
 	.masthead-brand {
-		font-weight: 400;
-		font-size: 1.6em;
-		color: rgba(221, 221, 221, 0.938);
-		font-family: "Ubuntu", sans-serif;
+		float: left;
 	}
 
-	.inner.cover {
-		/** */
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		/* height: 215px; */
-		overflow: hidden;
-		transform: 0.75s;
-		transition: height 0.75s, opacity 0.75s;
+	.nav-masthead {
+		float: right;
 	}
-	.inner.cover.collapsed {
-		opacity: 0;
-		/* height: 0px; */
-		overflow: hidden;
-		transform: 0.75s;
-		transition: height 1s, opacity 0.8s;
-	}
-	.cover-heading {
-		margin-bottom: 3px;
-		font-weight: 400;
-		letter-spacing: 0.05em;
-		font-size: 2.3em;
-		font-family: "Ubuntu", sans-serif;
-	}
-	.cover-text {
-		margin-bottom: 10px;
-		color: rgb(228, 228, 228);
-		font-size: 1.2rem;
-	}
+}
 
-	.dataDisplay {
-		color: white;
-		padding: 0;
-		transform: 1s;
-		transition: height 0.5s, opacity 0.5s;
-		opacity: 0;
-		height: 0px;
-	}
+/** Cover */
+.cover {
+	padding: 0 1.5rem;
+}
 
-	.dataDisplay.show {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-around;
-		transform: 1s;
-		transition: height 0.8s, opacity 0.65s;
-		opacity: 1;
-		/* height: 150px; */
-	}
+.cover .btn-lg {
+	padding: 0.75rem 1.25rem;
+	font-weight: 700;
+}
 
-	.dataDisplay > h2 {
-		letter-spacing: 0.07em;
-		/* font-family: 'Ubuntu', sans-serif; */
-	}
-
-	.detail-date {
-		letter-spacing: 0.1em;
-		color: rgb(226, 226, 226);
-	}
-
-	.detail-list {
-		display: grid;
-		gap: 5px;
-		padding: 15px 0px;
-		margin: auto;
-		font-size: 1.1em;
-		list-style: none;
-		text-align: center;
-	}
-
-	.detail-list > li {
-		letter-spacing: 0.07em;
-	}
-
-	.detail-name {
-		margin-right: 4px;
-		font-weight: 500;
-	}
-
-	.bd-placeholder-img {
-		font-size: 1.125rem;
-		text-anchor: middle;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
-
-	@media (min-width: 768px) {
-		.bd-placeholder-img-lg {
-			font-size: 3.5rem;
-		}
-	}
-
-	/* end new */
-
-	/* * Header*/
-	.masthead {
-		margin-bottom: 2rem;
-		display: block;
-	}
-
-	.masthead-brand {
-		margin-bottom: 0;
-	}
-
-	.nav-masthead .nav-link {
-		padding: 0.25rem 0;
-		font-weight: 700;
-		color: rgba(255, 255, 255, 0.5);
-		background-color: transparent;
-		border-bottom: 0.25rem solid transparent;
-	}
-
-	.nav-masthead .nav-link:hover,
-	.nav-masthead .nav-link:focus {
-		border-bottom-color: rgba(255, 255, 255, 0.25);
-	}
-
-	.nav-masthead .nav-link + .nav-link {
-		margin-left: 1rem;
-	}
-
-	.nav-masthead .active {
-		color: #fff;
-		border-bottom-color: #fff;
-	}
-
-	@media (min-width: 48em) {
-		.masthead-brand {
-			float: left;
-		}
-
-		.nav-masthead {
-			float: right;
-		}
-	}
-
-	/** Cover */
-	.cover {
-		padding: 0 1.5rem;
-	}
-
-	.cover .btn-lg {
-		padding: 0.75rem 1.25rem;
-		font-weight: 700;
-	}
-
-	.mastfoot {
-		color: rgba(255, 255, 255, 0.5);
-	}
+.mastfoot {
+	color: rgba(255, 255, 255, 0.5);
+}
 </style>

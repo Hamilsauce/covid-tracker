@@ -101,15 +101,7 @@ body {
   font-size: 1.2rem;
 }
 
-.dataDisplay {
-  color: white;
-  padding: 0;
-  transform: 1s;
-  transition: height 0.5s, opacity 0.5s;
-  opacity: 0;
-  height: 0px;
-}
-
+.dz
 .dataDisplay.show {
   display: flex;
   flex-direction: column;
