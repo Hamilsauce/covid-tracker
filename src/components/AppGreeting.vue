@@ -4,19 +4,20 @@
 			<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 				<main role="main" class="inner cover" v-if="!displayData">
 					<h1 class="cover-heading">Stalk the 'Rona</h1>
-					<p class="lead cover-text">
-						With corona calling the shots on the street, we call the queries.
-					</p>
 
-					<div class="lead">
+					<div class="lead greetingBody" v-if="displayOptions === false">
+						<p class="lead cover-text">
+							With corona calling the shots on the street, we call the queries.
+						</p>
 						<div
 							class="btn btn-lg btn-secondary"
 							id="startButton"
-							@click="revealQueryForm"
+							@click="toggleOptions"
 						>
 							Corona Query!
 						</div>
 					</div>
+
 				</main>
 			</div>
 		</transition>
@@ -32,24 +33,36 @@ export default {
 	data() {
 		return {
 			displayData: false,
-			country: ''
+			displayOptions: false,
+
+			country: ""
 		};
 	},
 	methods: {
 		revealQueryForm() {
 			// let selectCountry = (this.country = "USA");
-			this.$emit('revealQueryForm'); //this.country is just placeholder for user input
+			this.$emit("revealQueryForm"); //this.country is just placeholder for user input
+		},
+		toggleOptions() {
+			setTimeout(() => {
+				this.displayOptions = !this.displayOptions;
+			}, 750);
+		},
+
+		enableButtons() {
+			this;
 		}
-	}
+	},
+	created() {}
 };
 </script>
 
 <style scoped>
 .fade-enter-active {
-	transition: opacity 1.45s;
+	transition: opacity 1.1s;
 }
 .fade-leave-active {
-	transition: opacity 1s;
+	transition: opacity 0.75s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
@@ -57,6 +70,17 @@ export default {
 /* h1::before {
 		content:attr(data-tooltip);
 	} */
+
+.greetingBody {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	z-index: 1;
+}
+
+
+
 h1:hover::before {
 	display: inline-block;
 }

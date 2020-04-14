@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+ <script src="https://unpkg.com/vue@latest"></script>
+ <script src="https://unpkg.com/vue-select@latest"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css"> 
+<style>
+ body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  text-rendering: optimizelegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-text-size-adjust: none;
+ }
+
+ h1,
+ .muted {
+  color: #2c3e5099;
+ }
+
+ h1 {
+  font-size: 26px;
+  font-weight: 600;
+ }
+
+ #app {
+  max-width: 30em;
+  margin: 1em auto;
+ }
+</style>
+</head>
+
+<body>
+<div id="app">
+ <h1>Vue Select</h1>
+ <v-select :options="options"></v-select>
+</div>
+<script>
+ Vue.component('v-select', VueSelect.VueSelect)
+
+ new Vue({
+  el: '#app',
+  data: {
+   options: []
+  }
+ })
+</script>
+</body>
+
+</html>

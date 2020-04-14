@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    gridColumns: ["date", "confirmed", "deaths", "recovered"],
+    queryResults: []
   },
   mutations: {
   },

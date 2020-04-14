@@ -3,20 +3,43 @@
 		<section class="home-top">
 			<transition name="fade">
 				<AppGreeting
-					@revealQueryForm="revealForm"
+					@displayDataTable="this.dataTableActive = true"
+					@displayDataCar="this.toggleDataCard"
 					v-if="greetingActive === true"
 					msg="Welcome to Your Vue.js App"
 					class="appGreeting"
 				/>
 			</transition>
+			<section class="button-container">
+				<form action="">
+					<input
+						@click="toggleDataCard"
+						type="button"
+						class="toggleButtons showLatestDay"
+						value="Show the latest"
+					/>
+					<input
+						@click="toggleDataTable"
+						type="button"
+						class="toggleButtons showTableButton"
+						value="Let's get Tabular"
+					/>
+				</form>
+			</section>
 			<DataCard
 				class="temp-display"
-				v-if="queryFormActive === true"
+				v-if="showDataCard === true"
 				:cardData="cardData"
 			/>
 		</section>
 
-		<section class="home-bottom"></section>
+		<!-- <label for="countryInput" class="inputLabel"></label>
+              <select name="countryInput" v-model="countryParam" class="countryInput">
+                <option value="USA">Volvo</option>
+                <option value="IND">Saab</option>
+                <option value="fiat">Fiat</option>
+                <option value="audi">Audi</option>
+              </select> -->
 
 		<DataTable
 			:dataSet="queryResults"
@@ -44,13 +67,16 @@ export default {
 	},
 	data() {
 		return {
+			showDataCard: false,
 			greetingActive: false,
 			queryFormActive: false,
 			dataTableActive: false,
 			queryParams: "",
 			formViewConent: "",
 			country: "",
-			gridColumns: ["date", "confirmed", "deaths", "recovered"]
+			gridColumns: ["date", "confirmed", "deaths", "recovered"],
+			countryParam: "",
+			latestGlobal: ""
 		};
 	},
 	methods: {
@@ -58,13 +84,6 @@ export default {
 			let params = this.queryParams;
 			this.$emit("queryRequested", params);
 		},
-		// fixDates(date) {
-		// 	let [date, details] = Object.entries(date).pop();
-		//     let [year, month, day] = date.split("-");
-
-		//     let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-
-		// },
 		revealForm() {
 			this.queryParams = "global";
 			this.requestData();
@@ -82,21 +101,31 @@ export default {
 			setTimeout(() => {
 				this.queryFormActive = true;
 			}, 1500);
+		},
+		toggleDataCard() {
+			this.showDataCard = !this.showDataCard;
+		},
+		toggleTableState() {
+			this.dataTableActive = !this.dataTableActive;
 		}
+
 	},
 	computed: {
 		cardData() {
-			let newArray = this.queryResults[this.queryResults.length - 1];
-			let detailArray = Object.entries(newArray[1]);
-			let dateArray = ['date', newArray[0]];
-			detailArray.push(dateArray)
-			return detailArray;
-			// });
-			// let final = detailArray.push(date);
-			// return final;
+			let flattenedData = Object.entries(this.rawData.result).map(
+				([date, details]) => {
+					let [year, month, day] = date.split("-");
+					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+
+					details["date"] = latestDate;
+					return details;
+				}
+			);
+			return flattenedData;
+
 		}
-		// 	cardData(data = Array) {
-		// 		console.log(Object.entries(data.result).pop());
+
+		// console.log(Object.entries(data.result).pop());
 		// 		let dataOutput = Object.entries(data.result)
 		// 			.pop()
 		// 			.map(([date, details]) => {
@@ -139,6 +168,27 @@ export default {
 }
 .temp-display {
 	z-index: 5;
+}
+
+button {
+	font-size: 14px;
+}
+
+.button-container {
+	/* /* position: absolute; */
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	/* transition: 1s; */
+}
+.toggleButtons {
+	border-radius: 12px;
+	padding: 10px;
+	background: #4b3669;
+	color: white;
+	border: 0.05rem solid rgba(255, 255, 255, 0.671);
+	font-size: 1.25rem;
+	line-height: 1.5;
 }
 
 /* //* This is for formContent component */

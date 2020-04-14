@@ -13,8 +13,7 @@
 						:class="{ active: sortKey == key }"
 					>
 						{{ key | capitalize }}
-						<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-						</span>
+						<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"> </span>
 					</th>
 				</tr>
 			</thead>
@@ -55,6 +54,13 @@ export default {
 		}
 	},
 	computed: {
+		flattenData() {
+			let flatData = this.dataSet.map(([date, details]) => {
+				details.date = date;
+				return details;
+			});
+			return flatData;
+		},
 		filteredDataSet() {
 			let sortKey = this.sortKey;
 			let searchQuery = this.searchQuery && this.searchQuery.toLowerCase();
@@ -101,6 +107,8 @@ body {
 .table-container {
 	position: relative;
 	height: 100%;
+	max-height: 500px;
+	overflow: auto;
 	min-height: 100vw;
 	padding-top: 0;
 	/* display: flex; */
@@ -125,10 +133,13 @@ body {
 }
 
 table {
+	display: grid;
 	border: 2px solid #40487a;
 	border-radius: 6px;
 	background: #fff;
 	/* padding: 5px; */
+	max-height: 500px;
+	overflow: auto;
 }
 
 th {
@@ -148,7 +159,7 @@ th {
 
 td {
 	box-sizing: border-box;
-	color: rgb(129, 127, 127);
+	color: rgb(29, 29, 29);
 	background-color: #f9f9f9;
 	text-shadow: none;
 	/* font-family: 'Ubuntu', sans-serif;

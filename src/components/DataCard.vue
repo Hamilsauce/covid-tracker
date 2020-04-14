@@ -48,7 +48,8 @@ export default {
 				return item[0] !== 'date';
 			})
 			return filtered;
-		}
+    },
+
 		// formattedDate() {
 		// 	let [year, month, day] = this.rawDataObj.date.split("-");
 		// 	return new Date(`${month}/${day}/${year}`).toLocaleDateString();
@@ -59,7 +60,11 @@ export default {
 			return str.charAt(0).toUpperCase() + str.slice(1);
 		}
 	},
-	watch: {},
+	watch: {
+    cardData: function() {
+
+    }
+  },
 
 	/* Vue lifecycle hooks (Ref: https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks) */
 	created() {},
@@ -82,8 +87,7 @@ export default {
 	letter-spacing: 0.1em;
 	color: rgb(226, 226, 226);
 }
-.card-container {
-}
+
 
 .detail-list {
 	display: grid;
