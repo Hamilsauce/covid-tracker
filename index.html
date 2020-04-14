@@ -16,12 +16,12 @@
   <div id="app">
   <header class="app-header">
     <h1 class="title">{{heading}}</h1>
-    <p class="subtitle">{{v-select.value}}</p>
+    <p class="subtitle">{{vs__selected}}{{selectedCountry}}</p>
   </header>
   <div class="formContainer">
     <form class="userform">
     <div class="selectContainer">
-     <v-select label="COUNTRY" :options="options" v-model="value"></v-select>
+     <v-select v-model="vs__selected" label="COUNTRY" :reduce="COUNTRY => COUNTRY.CODE" :options="options" />>
     </div>
     </form>
   </div>
