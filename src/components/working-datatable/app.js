@@ -19,6 +19,7 @@ Vue.component('demo-grid', {
    sortKey: '',
    sortOrders: sortOrders,
    searchQuery: '',
+   selectedRow: ''
   }
  },
  watch: {

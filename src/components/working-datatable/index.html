@@ -57,7 +57,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="entry in filteredHeroes">
+        <tr v-for="entry in filteredHeroes" id="entry.date" :key="entry.date" @click="selectedRow = entry.date" 
+        :class="{hilight: selectedRow == entry.date}" @dblclick="console.log(entry.date)">
           <td v-for="key in columns">
             {{entry[key]}}
           </td>
@@ -69,3 +70,6 @@
 </body>
 
 </html>
+<!--    v-for="item in items"
+:class="{highlight:item.id == selected}"
+@click="selected = item.id">{{item.id}}</li> -->
