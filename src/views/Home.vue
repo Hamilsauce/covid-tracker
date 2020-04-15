@@ -1,6 +1,14 @@
 <template>
 	<div class="home">
 		<section class="home-top">
+			<div class="selectContainer">
+				<v-select
+					v-model="vs__selected"
+					label="COUNTRY"
+					:reduce="COUNTRY => COUNTRY.CODE"
+					:options="options"
+				/>>
+			</div>
 			<transition name="fade">
 				<AppGreeting
 					@displayDataTable="this.dataTableActive = true"
@@ -19,7 +27,6 @@
 						value="Show the latest"
 					/>
 					<input
-						@click="toggleDataTable"
 						type="button"
 						class="toggleButtons showTableButton"
 						value="Let's get Tabular"
@@ -40,27 +47,20 @@
                 <option value="fiat">Fiat</option>
                 <option value="audi">Audi</option>
               </select> -->
-
-		<DataTable
-			:dataSet="queryResults"
-			:columns="gridColumns"
-			v-if="dataTableActive"
-		/>
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
 import AppGreeting from "@/components/AppGreeting.vue";
-import DataTable from "@/components/DataTable";
 import DataCard from "@/components/DataCard";
-
+import vSelect from "vue-select";
 export default {
 	name: "Home",
 	components: {
 		AppGreeting,
 		DataCard,
-		DataTable
+		vSelect
 	},
 	props: {
 		queryResults: Array
@@ -76,7 +76,9 @@ export default {
 			country: "",
 			gridColumns: ["date", "confirmed", "deaths", "recovered"],
 			countryParam: "",
-			latestGlobal: ""
+			latestGlobal: "",
+			vs__selected: "",
+			options: []
 		};
 	},
 	methods: {
@@ -107,8 +109,14 @@ export default {
 		},
 		toggleTableState() {
 			this.dataTableActive = !this.dataTableActive;
+		},
+		getIsoCodes() {
+			fetch("https://hamilsauce.github.io/codes.json")
+				.then(res => res.json())
+				.then(data => {
+					this.options = data.codes;
+				});
 		}
-
 	},
 	computed: {
 		cardData() {
@@ -122,7 +130,6 @@ export default {
 				}
 			);
 			return flattenedData;
-
 		}
 
 		// console.log(Object.entries(data.result).pop());
@@ -154,11 +161,12 @@ export default {
 	},
 	mounted() {
 		this.unhideGreeting();
+		this.getIsoCodes();
 	}
 };
 </script>
 
-<style>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 1s;
@@ -218,5 +226,21 @@ button {
 	/* transition: height 0.8s, opacity 0.65s; */
 	opacity: 1;
 	/* height: 150px; */
+}
+
+.selectContainer {
+	color: rgb(54, 54, 54);
+	background: rgba(60, 35, 80, 0.6);
+	border-radius: 3px;
+	width: 100%;
+	max-width: 300px;
+	margin: auto;
+	padding: 10px;
+}
+
+.v-select {
+	background: rgb(255, 255, 255);
+	border-radius: 3px;
+	font-size: 1em;
 }
 </style>

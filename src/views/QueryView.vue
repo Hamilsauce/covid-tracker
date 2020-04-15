@@ -5,19 +5,9 @@
 			<div class="form-container">
 				<form class="queryForm">
 					<div class="formGroup">
-						<label for="countryInput" class="inputLabel"></label>
-						<select name="countryInput" v-model="countryParam" class="countryInput">
-							<option value="USA">Volvo</option>
-							<option value="IND">Saab</option>
-							<option value="fiat">Fiat</option>
-							<option value="audi">Audi</option>
-						</select>
-						<input type="submit" value="" />
-					</div>
-					<div class="formGroup">
-						<label for="dateInput" class="inputLabel"></label>
-						<input type="date" name="dateInput" class="dateIn" />
-						<input type="submit" value="Submit" />
+						<div class="selectContainer">
+							<v-select />
+						</div>
 					</div>
 				</form>
 			</div>
@@ -25,8 +15,10 @@
 		<section class="queryview-bottom">
 			<transition name="fade">
 				<DataTable
-					:dataSet="dataSet"
+					v-model="dataReady"
+					:heroes="gridData"
 					:columns="gridColumns"
+					:dataSet="result"
 					v-if="dataTableActive"
 				/>
 			</transition>
@@ -36,16 +28,21 @@
 
 <script>
 // @ is an alias to /src
-// import DataTable from "@/components/DataTable";
+import DataTable from "@/components/DataTable";
 // import DataCard from "@/components/DataCard";
+import vSelect from "vue-select";
 
 export default {
 	name: "QueryView",
 	components: {
 		// DataCard,
-		// DataTable
+		DataTable,
+		vSelect
 	},
-	props: {},
+	props: {
+		dataSet: Array,
+		result: undefined
+	},
 	data() {
 		return {
 			queryFormActive: false,
@@ -53,8 +50,9 @@ export default {
 			queryParams: "",
 			formViewConent: "",
 			countryParam: "",
-			gridColumns: [],
-			rawData: []
+			gridColumns: ["date", "confirmed", "deaths"],
+			gridData: undefined,
+			dataReady: false
 		};
 	},
 	methods: {
@@ -88,81 +86,67 @@ export default {
 			this.fetchTableData();
 		}
 	},
-	computed: {
-		dataSet() {
-			let flattenedData = Object.entries(this.rawData.result).map(
-				([date, details]) => {
-					let [year, month, day] = date.split("-");
-					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-
-					details["date"] = latestDate;
-					return details;
-				}
-			);
-			return flattenedData;
+	computed: {},
+	watch: {
+		result: function(value) {
+			let flatDates = Object.entries(value).map(([date, details]) => {
+				return [["date", new Date(date).toLocaleDateString()]]
+					.concat(Object.entries(details))
+					.reduce((obj, [prop, val]) => {
+						obj[prop] = val;
+						return obj;
+					}, {});
+			});
+			this.gridData = flatDates;
+			this.dataReady = true;
 		}
-
-  // 	ca,rdData(data = Array) {
-		// 		console.log(Object.entries(data.result).pop());
-		// 		let dataOutput = Object.entries(data.result)
-		// 			.pop()
-		// 			.map(([date, details]) => {
-		// 				console.log(date, details);
-		// 				return [date, details];
-		// 			})
-		// 			.reduce((obj, [date, details]) => {
-		// 				obj.date = date[1];
-		// 				obj[details[0]] = details[1];
-
-		// 				return obj;
-		// 			}, {});
-		// 		return dataOutput;
-		// 	},
-		// 	cardData2(data = Array) {
-		// 		let output = data.map(dayObj => {
-
-		//         let newObj = Object.entries(dayObj)
-		//             .reduce((obj, item) => {
-		//                 obj[item[0]] = item[1];
-		//                 return obj;
-		//             }, {});
-		//         return newObj;
-		//     });
-		// return output
 	},
-  watch: {
-    rawData(newData, oldData) {
-      console.log(newData, oldData);
-      const sampleData = Object.values(this.rawData)[1];
-      sampleData
-      // let headers = ['date'].concat(Object.key(newColumns));
-      console.log(sampleData);
+	created() {}
+};
 
-        // this.gridColumns = headers;
-    },
-    coutryParam(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        fetch("https://covidapi.info/api/v1/country/USA")
-          .then(res => res.json())
-          .then(data => {
-            this.rawData = data;
-            console.log(data);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-        }
-      },
-	created() {
-    this.requestData();
-    this.buildTable();
+// dataSet() {
+// 	let flattenedData = Object.entries(this.rawData.result).map(
+// 		([date, details]) => {
+// 			let [year, month, day] = date.split("-");
+// 			let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
 
-  }
-  }
-}
+// 			details["date"] = latestDate;
+// 			return details;
+// 		}
+// 	);
+// 	return flattenedData;
+// }
+
+// 	ca,rdData(data = Array) {
+// 		console.log(Object.entries(data.result).pop());
+// 		let dataOutput = Object.entries(data.result)
+// 			.pop()
+// 			.map(([date, details]) => {
+// 				console.log(date, details);
+// 				return [date, details];
+// 			})
+// 			.reduce((obj, [date, details]) => {
+// 				obj.date = date[1];
+// 				obj[details[0]] = details[1];
+
+// 				return obj;
+// 			}, {});
+// 		return dataOutput;
+// 	},
+// 	cardData2(data = Array) {
+// 		let output = data.map(dayObj => {
+
+//         let newObj = Object.entries(dayObj)
+//             .reduce((obj, item) => {
+//                 obj[item[0]] = item[1];
+//                 return obj;
+//             }, {});
+//         return newObj;
+//     });
+// return output
 </script>
 
-<style>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 1s;
@@ -206,5 +190,22 @@ export default {
 	/* transition: height 0.8s, opacity 0.65s; */
 	opacity: 1;
 	/* height: 150px; */
+}
+
+.selectContainer {
+	color: rgb(54, 54, 54);
+	background: rgba(60, 35, 80, 0.6);
+	border-radius: 3px;
+	width: 100%;
+	max-width: 350px;
+	margin: auto;
+	padding: 10px;
+}
+
+.v-select {
+	background: rgb(255, 255, 255);
+	border: 1px solid rgba(55, 20, 60, 0.8);
+	border-radius: 3px;
+	font-size: 1em;
 }
 </style>
