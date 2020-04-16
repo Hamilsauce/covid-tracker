@@ -21,16 +21,19 @@ var study = new Vue({
         let match = codeArray.find(opt => {
           return opt.CODE == this.vs__selected;
         })
-        return match.COUNTRY;
+          return match.COUNTRY;
       }
+
     }
   },
-  mounted() {
-    fetch('./data/isocodes.json')
+  async mounted() {
+    await fetch('./data/isocodes.json')
       .then(res => res.json())
       .then(data => {
-        let codeList = data.codes;
+        let codeList = data;
         this.options = codeList;
+        console.log(this.options);
+
       })
   }
 });

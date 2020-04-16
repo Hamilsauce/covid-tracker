@@ -7,7 +7,7 @@
 					label="COUNTRY"
 					:reduce="COUNTRY => COUNTRY.CODE"
 					:options="options"
-				/>>
+				/>
 			</div>
 			<transition name="fade">
 				<AppGreeting
