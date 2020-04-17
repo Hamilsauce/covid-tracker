@@ -105,7 +105,15 @@ h1 {
 .formContainer {
   padding: 15px;
 }
-
+.radioContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.radioContainer>div {
+padding: 10px;
+margin: 2px auto;
+  
+}
 .selectContainer {
   color: white;
   background: rgba(60, 35, 80, 0.6);
@@ -115,11 +123,36 @@ h1 {
   margin: auto;
 
 }
-
 .v-select {
-
   background: white;
-  border: 1px solid rgba(55, 20, 60, 0.8);
+  border: 1px solid rgba(55, 20, 60, 0.9);
   border-radius: 3px;
   font-size: 1.1em;
+  
+}
+
+.datacard{
+  background: white;
+  color: black;
+}
+.datacard {
+  font-size: 1.5em;
+  text-align: center;
+
+  box-sizing: border-box;
+  margin: auto;
+  padding: 20px 10px;
+  width: 90%;
+  box-shadow: 0 3px 10px 1px rgba(55, 30, 60, 0.0);
+  background: rgba(175, 130, 175, 0.0);
+  border-bottom: 2px solid rgba(60, 25, 65, 0.0);
+  color: #ffffff;
+}
+.datacard>ul{
+  list-style: none;
+  margin: auto;
+  padding: 0;
+  width: auto;
+  text-align: center;
+  text-shadow: 0 0 35px #00000090;
 }

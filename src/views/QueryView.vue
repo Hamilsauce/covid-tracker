@@ -117,7 +117,7 @@ export default {
 // 	return flattenedData;
 // }
 
-// 	ca,rdData(data = Array) {
+// 	cardData(data = Array) {
 // 		console.log(Object.entries(data.result).pop());
 // 		let dataOutput = Object.entries(data.result)
 // 			.pop()

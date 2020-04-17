@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>COVID Tracker</title>
   <script src="https://unpkg.com/vue@latest"></script>
   <script src="https://unpkg.com/vue-select@latest"></script>
@@ -17,26 +16,52 @@
   <div id="app">
     <header class="app-header">
       <h1 class="title">{{heading}}</h1>
-      <p class="subtitle">{{selectedCountry}}</p>
+      <p class="subtitle">{{v__selected}}</p>
     </header>
-    <div class="formContainer">
+    <section class="formContainer">
       <form class="userform">
+        <div class="radioContainer">
+          <!--  name: queryScopeOption, class: radioOption (radioLatestradioOption radioHistorica)l -->
+         <div>
+         <label for="radioLatest">See latest</label>
+          <input type="radio" class="radioOption radioLatest" name="queryScopeOption" id="radioLatest" value="latest" v-model="queryScope" />
+           
+         </div> 
+         <div>
+          <label for="radioHistorical">See historical</label>
+          <input type="radio" class="radioOption radioHistorical" name="queryScopeOption" id="radioHistorical" value="historical" v-model="queryScope" />
+           
+         </div> 
+        </div>
         <div class="selectContainer">
-          <v-select v-model="vs__selected" label="COUNTRY" :reduce="COUNTRY => COUNTRY.CODE" :options="options" />>
+          <v-select v-model="v__selected" label="COUNTRY" :reduce="COUNTRY => COUNTRY.CODE" :options="options" />
         </div>
       </form>
-    </div>
+    </section>
     <div class="contentContainer">
-
+      <datacard v-if="cardDataReady === true" v-model="selectedCountry" class="datacard" :dataset="flatCountryLatest" />
     </div>
     <footer class="app-footer">
-
     </footer>
-
   </div>
-  <!-- Project -->
+  <!--  dataCard templafe  -->
+  <script type="text/x-template" id="datacard-template">
+    <div @click="peek">
+      <header class="card-header">
+        <h1 class="country-display">{{selectedCountry}}</h1>
+        <p class="date-display">{{date}}</p> 
+      </header>
+      <ul class="card-body">
+        <li class="confirmed-display">Confirmed: {{confirmed}}</li>
+        <li class="deaths-display">Deaths: {{deaths}}</li>
+        <li class="recovered-display">Recovered: {{recovered}}</li>
+      </ul>
+    </div>
+  </script>
   <script src="./js/app.js"></script>
-  <!-- <script src="./js/covid.js"></script> -->
+  <script>
+    const latestRadio = document.querySelector('.radioLatest').checked = true
+  </script>
 </body>
 
 </html>
