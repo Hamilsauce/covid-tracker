@@ -16,7 +16,7 @@
   <div id="app">
     <header class="app-header">
       <h1 class="title">{{heading}}</h1>
-      <p class="subtitle">{{v__selected}}</p>
+      <p class="subtitle"></p>
     </header>
     <section class="formContainer">
       <form class="userform">
@@ -29,7 +29,7 @@
          </div> 
          <div>
           <label for="radioHistorical">See historical</label>
-          <input type="radio" class="radioOption radioHistorical" name="queryScopeOption" id="radioHistorical" value="historical" v-model="queryScope" />
+          <input type="radio" class="radioOption radioHistorical" name="queryScopeOption" id="radioHistorical" value="historical" v-model="queryScope" disabled/>
            
          </div> 
         </div>
@@ -48,19 +48,19 @@
   <script type="text/x-template" id="datacard-template">
     <div @click="peek">
       <header class="card-header">
-        <h1 class="country-display">{{selectedCountry}}</h1>
+        <h1 class="country-display">{{countryName}}</h1>
         <p class="date-display">{{date}}</p> 
       </header>
       <ul class="card-body">
-        <li class="confirmed-display">Confirmed: {{confirmed}}</li>
-        <li class="deaths-display">Deaths: {{deaths}}</li>
-        <li class="recovered-display">Recovered: {{recovered}}</li>
+        <li class="confirmed-display">Confirmed: {{Number(confirmed).toLocaleString()}}</li>
+        <li class="deaths-display">Deaths: {{Number(deaths).toLocaleString()}}</li>
+        <li class="recovered-display">Recovered: {{Number(recovered).toLocaleString()}}</li>
       </ul>
     </div>
   </script>
   <script src="./js/app.js"></script>
   <script>
-    const latestRadio = document.querySelector('.radioLatest').checked = true
+   // const latestRadio = document.querySelector('.radioLatest').checked = true
   </script>
 </body>
 

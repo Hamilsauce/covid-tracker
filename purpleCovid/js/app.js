@@ -21,7 +21,7 @@ Vue.component('datacard', {
   },
   computed: {
     countryName() {
-      return this.selectedCountry;
+      return this.dataset.countryName;
     },
     date() {
       return this.dataset.date;
@@ -56,8 +56,8 @@ var study = new Vue({
       baseUrl: 'https://covidapi.info/api/v1/',
       options: [],
       v__selected: '',
-      selectedCountry: '',
-      queryScope: '',
+      // selectedCountry: '',
+      queryScope: 'latest',
       cardDataReady: false,
       dataCountryHistorical: undefined,
       dataCountryLatest: undefined
@@ -101,26 +101,26 @@ var study = new Vue({
         return flatDates[0]
       }
     },
-//   selectedCountry() {
-//     // let code = this.v__selected;
-//     let codeArray = Object.values(this.options)
-//     let match = codeArray
-//       .find(opt => {
-//         return opt.CODE == this.v__selected;
-//       })
-//     return match.COUNTRY;
-//   }
-},
-watch: {
-  v__selected: function(val) {
-    let code = this.v__selected;
+  selectedCountry() {
+    // let code = this.v__selected;
     let codeArray = Object.values(this.options)
     let match = codeArray
       .find(opt => {
-        return opt.CODE == this.code;
+        return opt.CODE == this.v__selected;
       })
-    this.selectedCountry = match.COUNTRY;
-  },
+    return match.COUNTRY;
+  }
+},
+watch: {
+  // v__selected: function(val) {
+  //   let code = this.v__selected;
+  //   let codeArray = Object.values(this.options)
+  //   let match = codeArray
+  //     .find(opt => {
+  //       return opt.CODE == this.code;
+  //     })
+  //   this.selectedCountry = match.COUNTRY;
+  // },
   v__selected: function(val) {
     if (val && this.queryScope === 'latest') {
       fetch(`${this.baseUrl}country/${val}/latest`)
@@ -140,11 +140,11 @@ watch: {
   },
   dataCountryLatest: function(val, oldVal) {
     if (val) {
-
       setTimeout(() => {
 
+      console.log(this.selectedCountry);
         this.cardDataReady = true;
-      }, 2000)
+      }, 100)
     }
   }
 },
