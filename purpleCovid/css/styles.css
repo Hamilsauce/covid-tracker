@@ -22,6 +22,22 @@ contentContainer, app-footer
   --mainPurp5: #3A0434;
 }
 
+.fade-enter-active {
+  transition: opacity 1s;
+}
+
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  opacity: 0;
+}
+
 html,
 body {
   box-sizing: border-box;
@@ -105,15 +121,18 @@ h1 {
 .formContainer {
   padding: 15px;
 }
+
 .radioContainer {
   display: flex;
   justify-content: right;
 }
+
 .radioContainer>div {
-padding: 10px;
-margin: 2px auto;
-  
+  padding: 10px;
+  margin: 2px auto;
+
 }
+
 .selectContainer {
   color: white;
   background: rgba(60, 35, 80, 0.6);
@@ -123,18 +142,20 @@ margin: 2px auto;
   margin: auto;
 
 }
+
 .v-select {
   background: white;
   border: 1px solid rgba(55, 20, 60, 0.9);
   border-radius: 3px;
   font-size: 1.1em;
-  
+
 }
 
-.datacard{
+.datacard {
   background: white;
   color: black;
 }
+
 .datacard {
   font-size: 1.5em;
   text-align: center;
@@ -148,7 +169,8 @@ margin: 2px auto;
   border-bottom: 2px solid rgba(60, 25, 65, 0.0);
   color: #ffffff;
 }
-.datacard>ul{
+
+.datacard>ul {
   list-style: none;
   margin: 30px auto;
   padding: 0;
@@ -157,6 +179,7 @@ margin: 2px auto;
   text-shadow: 0 0 35px #00000095;
   font-size: 1em;
 }
+
 .datacard>ul>li {
   opacity: 0.9;
   text-shadow: 0 0 35px #00000095;
@@ -164,11 +187,11 @@ margin: 2px auto;
   letter-spacing: 2px;
   margin: 8px auto;
   width: fit-content;
-  
-  
+
+
 }
 
-.country-display{
+.country-display {
   width: 100%;
   padding: 0;
   margin: 0 0 5px 0;
@@ -176,20 +199,18 @@ margin: 2px auto;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-.date-display{
-  margin: 0 0 15px 0;;
+
+.date-display {
+  margin: 0 0 15px 0;
+  ;
   padding: 0;
   font-size: 0.8em;
   opacity: 0.9;
-  
+
 }
 
-.confirmed-display{
-  
-}
-.deaths-display{
-  
-}
-.recovered-display{
-  
-}
+.confirmed-display {}
+
+.deaths-display {}
+
+.recovered-display {}

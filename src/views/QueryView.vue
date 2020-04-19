@@ -166,7 +166,7 @@ export default {
 	}
 };
 
-// dataSet() {
+//dataSet() {
 // 	let flattenedData = Object.entries(this.rawData.result).map(
 // 		([date, details]) => {
 // 			let [year, month, day] = date.split("-");

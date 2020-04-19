@@ -22,16 +22,18 @@
       <form class="userform">
         <div class="radioContainer">
           <!--  name: queryScopeOption, class: radioOption (radioLatestradioOption radioHistorica)l -->
-         <div>
-         <label for="radioLatest">See latest</label>
-          <input type="radio" class="radioOption radioLatest" name="queryScopeOption" id="radioLatest" value="latest" v-model="queryScope" />
-           
-         </div> 
-         <div>
-          <label for="radioHistorical">See historical</label>
-          <input type="radio" class="radioOption radioHistorical" name="queryScopeOption" id="radioHistorical" value="historical" v-model="queryScope" disabled/>
-           
-         </div> 
+          <div>
+            <label for="radioLatest">See latest</label>
+            <input type="radio" class="radioOption radioLatest" name="queryScopeOption" id="radioLatest" value="latest"
+              v-model="queryScope" />
+
+          </div>
+          <div>
+            <label for="radioHistorical">See historical</label>
+            <input type="radio" class="radioOption radioHistorical" name="queryScopeOption" id="radioHistorical"
+              value="historical" v-model="queryScope" disabled />
+
+          </div>
         </div>
         <div class="selectContainer">
           <v-select v-model="v__selected" label="COUNTRY" :reduce="COUNTRY => COUNTRY.CODE" :options="options" />
@@ -39,7 +41,11 @@
       </form>
     </section>
     <div class="contentContainer">
-      <datacard v-if="cardDataReady === true" v-model="selectedCountry" class="datacard" :dataset="flatCountryLatest" />
+
+      <transition name="fade">
+        <datacard v-if="cardDataReady === true" v-model="selectedCountry" class="datacard"
+          :dataset="flatCountryLatest" />
+      </transition>
     </div>
     <footer class="app-footer">
     </footer>
@@ -49,7 +55,7 @@
     <div @click="peek">
       <header class="card-header">
         <h1 class="country-display">{{countryName}}</h1>
-        <p class="date-display">{{date}}</p> 
+        <p class="date-display">{{date}}</p>
       </header>
       <ul class="card-body">
         <li class="confirmed-display">Confirmed: {{Number(confirmed).toLocaleString()}}</li>

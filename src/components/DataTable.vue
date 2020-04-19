@@ -4,20 +4,21 @@
 			Search <input name="query" v-model="searchQuery" />
 		</form>
 		<div>
-			<table>
-				<thead>
-					<tr>
-						<th
-							v-for="key in columns"
-							@click="sortBy(key)"
-							:key="key"
-							:class="{ active: sortKey == key }"
-						>
-							{{ key | capitalize }}
-							<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"> </span>
-						</th>
-					</tr>
-				</thead>
+				<table>
+					<thead>
+						<tr>
+							<th
+								v-for="key in columns"
+								@click="sortBy(key)"
+								:key="key"
+								:class="{ active: sortKey == key }"
+							>
+								{{ key | capitalize }}
+								<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+								</span>
+							</th>
+						</tr>
+					</thead>
 
 					<tbody>
 						<tr
@@ -33,7 +34,7 @@
 							</td>
 						</tr>
 					</tbody>
-			</table>
+				</table>
 		</div>
 	</div>
 </template>
@@ -182,7 +183,13 @@ body {
 
 	color: rgb(53, 53, 53);
 }
-
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
+}
 .search {
 	margin-bottom: 5px;
 	border-radius: 10px;

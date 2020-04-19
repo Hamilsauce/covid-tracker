@@ -8,7 +8,7 @@ Vue.component('datacard', {
   template: '#datacard-template',
   props: {
     dataset: Object,
-    selectedCountry: undefined, 
+    selectedCountry: undefined,
     cardDataReady: Boolean
   },
   data() {
@@ -121,7 +121,8 @@ watch: {
   //     })
   //   this.selectedCountry = match.COUNTRY;
   // },
-  v__selected: function(val) {
+  v__selected: function (val) {
+    this.dataCountryLatest = '';
     if (val && this.queryScope === 'latest') {
       fetch(`${this.baseUrl}country/${val}/latest`)
         .then(res => res.json())
@@ -139,7 +140,8 @@ watch: {
     }
   },
   dataCountryLatest: function(val, oldVal) {
-    if (val) {
+    if (val !== oldVal) {
+      this.cardDataReady = false;
       setTimeout(() => {
 
       console.log(this.selectedCountry);

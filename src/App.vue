@@ -3,12 +3,16 @@
 		<main class="app-body">
 			<header class="app-header masthead mb-auto">
 				<div class="inner">
-					<h3 class="masthead-brand">COVID-19 APP</h3>
+					<h3 class="masthead-brand">COVIDify</h3>
 				</div>
 				<nav id="nav" class="nav nav-masthead justify-content-center">
 					<router-link to="/" class="nav-link active">Home</router-link>
 					<router-link to="/QueryView" class="nav-link active">Data</router-link>
-					<router-link to="/about" class="nav-link active">About</router-link>
+					<a
+						href="https://hamilsauce.github.io/covid-tracker/purpleCovid/index.html"
+						class="nav-link active"
+						>covidPurple</a
+					>
 				</nav>
 			</header>
 			<div class="app-content">
@@ -116,7 +120,13 @@ export default {
 	font-family: "Roboto Slab", serif;
 	font-family: "Montserrat Alternates", sans-serif;
 }
-
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
+}
 /* Links */
 a,
 a:focus,
@@ -166,7 +176,6 @@ html {
 	text-align: center;
 	color: #fff;
 	text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
-	overflow: auto;
 }
 /* new */
 .cover-container {
