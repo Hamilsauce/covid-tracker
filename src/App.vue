@@ -6,23 +6,18 @@
 					<h3 class="masthead-brand">COVID-19 APP</h3>
 				</div>
 				<nav id="nav" class="nav nav-masthead justify-content-center">
-					<router-link
-						to="/"
-						class="nav-link active"
-						:queryResults="flattenedDataSet"
-						>Home</router-link
-					>
-					<router-link to="/QueryView" class="nav-link">Data</router-link>
-					<router-link to="/about" class="nav-link">About</router-link>
+					<router-link to="/" class="nav-link active">Home</router-link>
+					<router-link to="/QueryView" class="nav-link active">Data</router-link>
+					<router-link to="/about" class="nav-link active">About</router-link>
 				</nav>
 			</header>
 			<div class="app-content">
-				<router-view :result="flattenedDataSet" />
-				<DataTable
+				<router-view :result="flattenedDataSet" @newCountryParam="handleNewParam" />
+				<!-- <DataTable
 					:dataSet="flattenedDataSet"
 					:columns="gridColumns"
 					v-if="dataTableActive"
-				/>
+				/> -->
 			</div>
 			<footer class="mastfoot mt-auto">
 				<div class="inner">
@@ -34,81 +29,13 @@
 </template>
 
 <script>
-import DataTable from "./components/DataTable";
-// import EventBus from "./components/eventBus.js";
-import axios from "axios";
+// import DataTable from "./components/DataTable";
+// import eventBus from "./components/eventBus";
 
 export default {
 	name: "app",
 	components: {
-		// EventBus
-		DataTable
-	},
-	methods: {
-		dataFetch(params) {
-			if (params == "latest-date") {
-				console.log("latest-date query");
-			} else {
-				let url = `${this.queryBuilder.baseUrl}/${params}`;
-				this.bigFetch(url);
-			}
-			console.log(params);
-		},
-
-		bigFetch() {
-			fetch("https://covidapi.info/api/v1/country/USA")
-				.then(res => res.json())
-				.then(data => {
-					this.queryResults = data.result;
-					console.log(this.queryResults);
-				})
-				.catch(err => {
-					console.log(err);
-				});
-		},
-		flattenDataSet() {
-			let flattenedData = Object.entries(this.queryResults).map(
-				([date, details]) => {
-					let [year, month, day] = date.split("-");
-					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-
-					details["date"] = latestDate;
-					return details;
-				}
-			);
-			return flattenedData;
-		},
-		async axiosQuery() {
-			// url = "https://covidapi.info/api/v1/country/USA";
-			try {
-				const res = await axios.get("https://covidapi.info/api/v1/country/USA");
-				let data = res.json();
-				console.log(data);
-				// this.queryResults = Object.entries(data.result);
-				this.queryResults = data.result;
-				console.log(data);
-			} catch (err) {
-				console.log(err);
-			}
-		},
-		fixDates(date) {
-			let [year, month, day] = date.split("-");
-			let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-			return latestDate;
-		}
-	},
-	computed: {
-		flattenedDataSet() {
-			let flattenedData = Object.entries(this.queryResults).map(
-				([date, details]) => {
-					let [year, month, day] = date.split("-");
-					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-					details["date"] = latestDate;
-					return details;
-				}
-			);
-			return flattenedData;
-		}
+		// eventBus
 	},
 	data() {
 		return {
@@ -119,16 +46,63 @@ export default {
 				globalTotals: "",
 				countryTotal: `country/${this.selectedCountry}/latest`
 			},
+			activeView: "data",
 			displayData: "",
 			searchQuery: "",
 			gridColumns: ["date", "confirmed", "deaths", "recovered"],
 			queryResults: [],
-			dataTableActive: false
+			dataTableActive: false,
+			countryParam: "USA"
 		};
 	},
+	methods: {
+		async bigFetch() {
+			await fetch(`https://covidapi.info/api/v1/country/${this.countryParam}`)
+				.then(res => res.json())
+				.then(data => {
+					this.queryResults = data.result;
+					console.log(this.queryResults);
+				})
+				.catch(err => {
+					console.log(err);
+					alert(`No data for ${this.countryParam}`);
+				});
+		},
+		handleNewParam(param) {
+			this.countryParam = param;
+			this.bigFetch();
+		},
+		setActiveView(view) {
+			this.activeView === view;
+			console.log("running");
+		}
+	},
+	computed: {
+		flattenedDataSet() {
+			let flattenedData = Object.entries(this.queryResults).map(
+				([date, details]) => {
+					let [year, month, day] = date.split("-");
+					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+					details["date"] = latestDate;
+					details.confirmed = Number(details.confirmed).toLocaleString();
+					details.deaths = Number(details.deaths).toLocaleString();
+					details.recovered = Number(details.recovered).toLocaleString();
+					return details;
+				}
+			);
+			return flattenedData;
+		}
+	},
+
 	mounted() {
 		this.bigFetch();
-	}
+		// this.getCountryParam();
+		// eventBus.$on("newCountryParam", data => {
+		// 	this.countryParam = data;
+		// 	this.bigFetch();
+		// });
+	},
+	created() {}
 };
 </script>
 
@@ -186,7 +160,7 @@ html {
 	gap: 10px;
 	grid-template-rows: 1fr 8fr 1fr;
 	height: 100vh;
-	max-width: 700px;
+	max-width: 500px;
 	padding: 0;
 	margin: auto;
 	text-align: center;
@@ -203,7 +177,7 @@ html {
 	margin: 5px 0px 15px 0px;
 }
 nav {
-	margin-bottom: 15px;
+	margin-bottom: 35px;
 }
 
 .masthead-brand {

@@ -1,19 +1,15 @@
 <template>
-	<div class="card-container">
-
+	<div class="card-container" v-if="dataReady === true">
 		<transition name="fade">
 			<h3 class="detail-date">
-		{{ this.displayDate }}		<!-- {{ this.formattedDate() }} -->
+				{{ displayData.date }}
+				<!-- {{ this.formattedDate() }} -->
 			</h3>
 		</transition>
 		<transition name="fade">
 			<ul class="formContentDisplay detail-list">
-				<li
-					class=""
-					v-for="item in displaDetails"
-					:key="item[0]"
-				>
-					{{ item[0] | capitalize }}: {{ Number( item[1]).toLocaleString() }}
+				<li class="" v-for="item in displayData" :key="item.date">
+					{{ item[0] | capitalize }}: {{ Number(item[1]).toLocaleString() }}
 				</li>
 			</ul>
 		</transition>
@@ -27,7 +23,8 @@ export default {
 	name: "DataCard",
 	components: {},
 	props: {
-		cardData: Array
+    cardData: Object,
+    dataReady: Boolean
 	},
 	data() {
 		return {};
@@ -35,20 +32,21 @@ export default {
 
 	methods: {},
 	computed: {
-		displayDate () {
-			let filtered = this.cardData.filter(item => {
-				return item[0] == 'date';
-			})
-		let [year, month, day] =  filtered[0][1].split("-");
-		return `${month}/${day}/${year}`;
-		},
+		// displayDate () {
+		// 	let filtered = this.cardData.filter(item => {
+		// 		return item[0] == 'date';
+		// 	})
+		// let [year, month, day] =  filtered[0][1].split("-");
+		// return `${month}/${day}/${year}`;
+		// },
 
-		displaDetails () {
-			let filtered = this.cardData.filter(item => {
-				return item[0] !== 'date';
-			})
-			return filtered;
-    },
+		displayData() {
+			// let filtered = this.cardData.filter(item => {
+			// 	return item[0] !== "date";
+			// });
+      // return filtered;
+      return Object.entries(this.cardData);
+		}
 
 		// formattedDate() {
 		// 	let [year, month, day] = this.rawDataObj.date.split("-");
@@ -61,10 +59,8 @@ export default {
 		}
 	},
 	watch: {
-    cardData: function() {
-
-    }
-  },
+		cardData: function() {}
+	},
 
 	/* Vue lifecycle hooks (Ref: https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks) */
 	created() {},
@@ -87,7 +83,6 @@ export default {
 	letter-spacing: 0.1em;
 	color: rgb(226, 226, 226);
 }
-
 
 .detail-list {
 	display: grid;

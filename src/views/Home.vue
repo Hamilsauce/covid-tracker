@@ -2,12 +2,12 @@
 	<div class="home">
 		<section class="home-top">
 			<div class="selectContainer">
-				<v-select
+				<!-- <v-select
 					v-model="vs__selected"
 					label="COUNTRY"
 					:reduce="COUNTRY => COUNTRY.CODE"
 					:options="options"
-				/>
+				/> -->
 			</div>
 			<transition name="fade">
 				<AppGreeting
@@ -19,7 +19,7 @@
 				/>
 			</transition>
 			<section class="button-container">
-				<form action="">
+				<!-- <form action="">
 					<input
 						@click="toggleDataCard"
 						type="button"
@@ -31,13 +31,14 @@
 						class="toggleButtons showTableButton"
 						value="Let's get Tabular"
 					/>
-				</form>
+				</form> -->
 			</section>
-			<DataCard
+			<!-- <DataCard
 				class="temp-display"
 				v-if="showDataCard === true"
+        v-model="dataReady"
 				:cardData="cardData"
-			/>
+			/> -->
 		</section>
 
 		<!-- <label for="countryInput" class="inputLabel"></label>
@@ -53,17 +54,17 @@
 <script>
 // @ is an alias to /src
 import AppGreeting from "@/components/AppGreeting.vue";
-import DataCard from "@/components/DataCard";
-import vSelect from "vue-select";
+// import DataCard from "@/components/DataCard";
+// import vSelect from "vue-select";
 export default {
 	name: "Home",
 	components: {
 		AppGreeting,
-		DataCard,
-		vSelect
+		// DataCard,
+		// vSelect
 	},
 	props: {
-		queryResults: Array
+		result: Array
 	},
 	data() {
 		return {
@@ -78,7 +79,8 @@ export default {
 			countryParam: "",
 			latestGlobal: "",
 			vs__selected: "",
-			options: []
+      options: [],
+      dataReady: false
 		};
 	},
 	methods: {
@@ -119,20 +121,36 @@ export default {
 		}
 	},
 	computed: {
-		cardData() {
-			let flattenedData = Object.entries(this.rawData.result).map(
-				([date, details]) => {
-					let [year, month, day] = date.split("-");
-					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+		// cardData() {
+			// let flattenedData = Object.entries(this.rawData.result).map(
+			// 	([date, details]) => {
+			// 		let [year, month, day] = date.split("-");
+			// 		let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
 
-					details["date"] = latestDate;
-					return details;
-				}
-			);
-			return flattenedData;
-		}
+			// 		details["date"] = latestDate;
+			// 		return details;
+			// 	}
+			// );
+			// return this.result[this.result.length - 1];
+    // }
+  },
+  watch: {
+    cardData: function(val, oldVal) {
+      if (val !== oldVal) {
+        this.dataReady = true;
 
-		// console.log(Object.entries(data.result).pop());
+      }
+
+    }
+  },
+	mounted() {
+		this.unhideGreeting();
+		this.getIsoCodes();
+	}
+};
+
+
+// console.log(Object.entries(data.result).pop());
 		// 		let dataOutput = Object.entries(data.result)
 		// 			.pop()
 		// 			.map(([date, details]) => {
@@ -158,12 +176,6 @@ export default {
 		//         return newObj;
 		//     });
 		// return output
-	},
-	mounted() {
-		this.unhideGreeting();
-		this.getIsoCodes();
-	}
-};
 </script>
 
 <style scoped>
@@ -230,7 +242,6 @@ button {
 
 .selectContainer {
 	color: rgb(54, 54, 54);
-	background: rgba(60, 35, 80, 0.6);
 	border-radius: 3px;
 	width: 100%;
 	max-width: 300px;

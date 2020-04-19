@@ -6,7 +6,13 @@
 				<form class="queryForm">
 					<div class="formGroup">
 						<div class="selectContainer">
-							<v-select />
+							<v-select
+								placeholder="United States"
+								v-model="v__selected"
+								label="COUNTRY"
+								:reduce="COUNTRY => COUNTRY.CODE"
+								:options="options"
+							/>
 						</div>
 					</div>
 				</form>
@@ -14,9 +20,17 @@
 		</section>
 		<section class="queryview-bottom">
 			<transition name="fade">
+				<DataCard
+					class="temp-display"
+					v-if="showDataCard === true"
+					v-model="dataReady"
+					:cardData="cardData"
+				/>
+			</transition>
+
+			<transition name="fade">
 				<DataTable
 					v-model="dataReady"
-					:heroes="gridData"
 					:columns="gridColumns"
 					:dataSet="result"
 					v-if="dataTableActive"
@@ -29,13 +43,13 @@
 <script>
 // @ is an alias to /src
 import DataTable from "@/components/DataTable";
-// import DataCard from "@/components/DataCard";
+import DataCard from "@/components/DataCard";
 import vSelect from "vue-select";
 
 export default {
 	name: "QueryView",
 	components: {
-		// DataCard,
+		DataCard,
 		DataTable,
 		vSelect
 	},
@@ -52,7 +66,12 @@ export default {
 			countryParam: "",
 			gridColumns: ["date", "confirmed", "deaths"],
 			gridData: undefined,
-			dataReady: false
+			latestGlobal: "",
+			v__selected: "",
+			options: [],
+			dataReady: false,
+			showDataCard: false,
+			cardData: undefined
 		};
 	},
 	methods: {
@@ -62,7 +81,7 @@ export default {
 			// this.$emit("queryRequested", params);
 		},
 		fetchTableData() {
-			fetch("https://covidapi.info/api/v1/country/USA")
+			fetch(`https://covidapi.info/api/v1/country/${this.v__selected}`)
 				.then(res => res.json())
 				.then(data => {
 					this.rawData = data;
@@ -84,24 +103,67 @@ export default {
 		buildTable() {
 			this.dataTableActive === true;
 			this.fetchTableData();
+		},
+		getIsoCodes() {
+			fetch("https://hamilsauce.github.io/codes.json")
+				.then(res => res.json())
+				.then(data => {
+					this.options = data.codes;
+				});
 		}
+		// newCountryParam() {
+		// 	let countryParam = this.vs__selected;
+		// 	EventBus.$emit("newCountryParam", countryParam);
+		// }
 	},
-	computed: {},
+	computed: {
+		flattenedDataSet() {
+			let flattenedData = Object.entries(this.queryResults).map(
+				([date, details]) => {
+					let [year, month, day] = date.split("-");
+					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+					details["date"] = latestDate;
+					details.confirmed = Number(details.confirmed).toLocaleString();
+					details.deaths = Number(details.deaths).toLocaleString();
+					details.recovered = Number(details.recovered).toLocaleString();
+					return details;
+				}
+			);
+			return flattenedData;
+		}
+		// cardData() {
+		// 	return this.gridData[this.result.length - 1];
+		// }
+	},
 	watch: {
+		v__selected: function(val) {
+			this.$emit("newCountryParam", val);
+			// this.fetchTableData();
+		},
+
 		result: function(value) {
-			let flatDates = Object.entries(value).map(([date, details]) => {
-				return [["date", new Date(date).toLocaleDateString()]]
-					.concat(Object.entries(details))
-					.reduce((obj, [prop, val]) => {
-						obj[prop] = val;
-						return obj;
-					}, {});
-			});
-			this.gridData = flatDates;
+			// let flatDates = Object.entries(value).map(([date, details]) => {
+			// 	return [["date", new Date(date).toLocaleDateString()]]
+			// 		.concat(Object.entries(details))
+			// 		.reduce((obj, [prop, val]) => {
+			// 			obj[prop] = val;
+			// 			return obj;
+			// 		}, {});
+			// });
+			this.gridData = value;
+			this.cardData = value[value.length - 1];
 			this.dataReady = true;
+		},
+		cardData: function(val) {
+			if (val) {
+				this.showDataCard = true;
+			}
 		}
 	},
-	created() {}
+	created() {},
+	mounted() {
+		this.getIsoCodes();
+	}
 };
 
 // dataSet() {
@@ -172,6 +234,10 @@ export default {
 	flex-direction: column;
 	justify-content: center;
 }
+.queryview-bottom {
+	height: 100%;
+	overflow: auto;
+}
 /*
 .hideGreeting {
 //	 color: white;
@@ -194,7 +260,7 @@ export default {
 
 .selectContainer {
 	color: rgb(54, 54, 54);
-	background: rgba(60, 35, 80, 0.6);
+	background: rgba(60, 35, 80, 0);
 	border-radius: 3px;
 	width: 100%;
 	max-width: 350px;

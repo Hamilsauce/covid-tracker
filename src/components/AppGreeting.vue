@@ -9,15 +9,16 @@
 						<p class="lead cover-text">
 							With corona calling the shots on the street, we call the queries.
 						</p>
-						<div
-							class="btn btn-lg btn-secondary"
-							id="startButton"
-							@click="toggleOptions"
-						>
-							Corona Query!
-						</div>
+						<router-link to="/QueryView" class="nav-link">
+							<div
+								class="btn btn-lg btn-secondary"
+								id="startButton"
+								@click="toggleOptions"
+							>
+								Corona Query!
+							</div>
+						</router-link>
 					</div>
-
 				</main>
 			</div>
 		</transition>
@@ -78,8 +79,6 @@ export default {
 	justify-content: space-around;
 	z-index: 1;
 }
-
-
 
 h1:hover::before {
 	display: inline-block;

@@ -18,20 +18,21 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr
-						v-for="entry in filteredHeroes"
-						id="entry.date"
-						:key="entry.date"
-						@click="selectedRow = entry.date"
-						:class="{ hilight: selectedRow == entry.date }"
-						@dblclick="console.log(entry.date)"
-					>
-						<td v-for="key in columns" :key="key">
-							{{ entry[key] }}
-						</td>
-					</tr>
-				</tbody>
+
+					<tbody>
+						<tr
+							v-for="entry in filteredDataSet"
+							id="entry.date"
+							:key="entry.date"
+							@click="selectedRow = entry.date"
+							:class="{ hilight: selectedRow == entry.date }"
+							@dblclick="console.log(entry.date)"
+						>
+							<td v-for="key in columns" :key="key">
+								{{ entry[key] }}
+							</td>
+						</tr>
+					</tbody>
 			</table>
 		</div>
 	</div>
@@ -42,7 +43,6 @@ export default {
 	props: {
 		heroes: Array,
 		columns: Array,
-		filterKey: String,
 		dataSet: Array,
 		dataReady: Boolean
 	},
@@ -71,18 +71,18 @@ export default {
 			console.log(this.dataSet.confirmed);
 			return this.dataSet;
 		},
-		filteredHeroes: function() {
+		filteredDataSet: function() {
 			let sortKey = this.sortKey;
-			let filterKey = this.filterKey && this.filterKey.toLowerCase();
+			let searchQuery = this.searchQuery && this.searchQuery.toLowerCase();
 			let order = this.sortOrders[sortKey] || 1;
 			let dataSet = this.dataSet;
-			if (filterKey) {
+			if (searchQuery) {
 				dataSet = dataSet.filter(function(row) {
 					return Object.keys(row).some(function(key) {
 						return (
 							String(row[key])
 								.toLowerCase()
-								.indexOf(filterKey) > -1
+								.indexOf(searchQuery) > -1
 						);
 					});
 				});
@@ -183,20 +183,6 @@ body {
 	color: rgb(53, 53, 53);
 }
 
-.table-container {
-	position: relative;
-	height: 100%;
-	max-height: 500px;
-	overflow: auto;
-	min-height: 100vw;
-	padding-top: 0;
-	/* display: flex; */
-	margin: auto;
-
-	/* display: grid;
-
-      gap: 5px; */
-}
 .search {
 	margin-bottom: 5px;
 	border-radius: 10px;
@@ -211,18 +197,7 @@ body {
 	font-size: 15px;
 }
 
-table {
-	display: grid;
-	border: 2px solid #40487a;
-	border-radius: 6px;
-	background: #fff;
-	/* padding: 5px; */
-	max-height: 500px;
-	overflow: auto;
-}
-
 th {
-	background: #40487a;
 	color: rgba(255, 255, 255, 0.66);
 	cursor: pointer;
 	font-size: 13px;
@@ -233,19 +208,18 @@ th {
 	user-select: none;
 	/* height: 50px; */
 	font-family: "Noto Sans JP", sans-serif;
-	border-bottom: 2px solid #363538c7;
 }
 
 td {
 	box-sizing: border-box;
-	color: rgb(29, 29, 29);
+	color: rgb(68, 68, 68);
 	background-color: #f9f9f9;
 	text-shadow: none;
 	/* font-family: 'Ubuntu', sans-serif;
   font-family: 'Montserrat Alternates', sans-serif; */
 	font-family: "Noto Sans JP", sans-serif;
 	font-size: 14px;
-	font-weight: 500;
+	font-weight: 400;
 	padding: 10px 5px;
 }
 
@@ -256,19 +230,8 @@ td {
 	margin: auto;
 	padding: 15px 5px;
 	width: 100%;
-	background: rgba(236, 236, 236, 0);
-	border: 1px solid rgba(216, 216, 216, 1);
 	border-radius: 8px;
-	box-shadow: 0px 0px 15px 1px rgba(96, 96, 96, 0.2);
 	max-width: max-content;
-}
-#search {
-	padding: 5px;
-}
-#search > input {
-	border-radius: 6px;
-	padding: 4px;
-	border: 1px solid rgba(200, 200, 200, 0.8);
 }
 
 table {
@@ -277,25 +240,17 @@ table {
 	grid-template-columns: 1fr repeat(auto-fit, 1fr 1fr 1fr);
 	grid-template-rows: repeat(auto, 70px);
 	justify-content: center;
-	/* gap: 5px;/**/
-	border: 1px solid rgba(155, 170, 155, 0.96);
+	border: 1px solid rgb(117, 53, 103);
 	border-radius: 3px;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0);
 	box-shadow: 0px 0px 10px 1px rgba(110, 110, 110, 0.308);
 	width: fit-content;
 	margin: auto;
 }
 thead {
-	/* display: flex;
- flex-direction: row;
- justify-content: space-evenly;/**/
-	background-color: blue;
-	padding: 4px 10px;
-	margin: 0;
-	background-color: #42b983;
+	padding: 0px 10px;
+	background-color: #772766;
 	width: 100%;
-	border-bottom: 2px solid rgba(105, 150, 100, 0.7);
-	box-shadow: 0px 3px 4px 1px rgba(110, 110, 110, 0.308);
 	z-index: 2;
 }
 tbody {
@@ -309,8 +264,8 @@ th {
 	/*display: flex;
 flex-direction: row;
 justify-content: center;/**/
-	background-color: #42b983;
-	color: rgba(255, 255, 255, 0.66);
+	background-color: #772766;
+	color: rgba(255, 255, 255, 0.726);
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -332,18 +287,16 @@ td {
 }
 tr {
 	width: 100%;
+	border: 1px solid rgba(255, 255, 255, 0);
 	border-bottom: 1px solid rgba(150, 150, 150, 0.26);
 }
-tr.hilight > td {
-	box-shadow: 0px 0px 85px 1px inset rgba(188, 157, 80, 0.6);
-
-	background: rgba(188, 157, 40, 0.5);
-	color: white;
+tr.hilight {
+	border: 1px solid white;
 }
-
-th,
-td {
-	/* min-width: 100px; */
+tr.hilight > td {
+	box-shadow: 0px 0px 85px 1px inset rgba(71, 71, 71, 0.657);
+	background: rgb(124, 124, 124);
+	color: white;
 }
 
 th.active {
