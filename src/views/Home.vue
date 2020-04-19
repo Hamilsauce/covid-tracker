@@ -59,7 +59,7 @@ import AppGreeting from "@/components/AppGreeting.vue";
 export default {
 	name: "Home",
 	components: {
-		AppGreeting,
+		AppGreeting
 		// DataCard,
 		// vSelect
 	},
@@ -79,8 +79,8 @@ export default {
 			countryParam: "",
 			latestGlobal: "",
 			vs__selected: "",
-      options: [],
-      dataReady: false
+			options: [],
+			dataReady: false
 		};
 	},
 	methods: {
@@ -122,66 +122,64 @@ export default {
 	},
 	computed: {
 		// cardData() {
-			// let flattenedData = Object.entries(this.rawData.result).map(
-			// 	([date, details]) => {
-			// 		let [year, month, day] = date.split("-");
-			// 		let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-
-			// 		details["date"] = latestDate;
-			// 		return details;
-			// 	}
-			// );
-			// return this.result[this.result.length - 1];
-    // }
-  },
-  watch: {
-    cardData: function(val, oldVal) {
-      if (val !== oldVal) {
-        this.dataReady = true;
-
-      }
-
-    }
-  },
+		// let flattenedData = Object.entries(this.rawData.result).map(
+		// 	([date, details]) => {
+		// 		let [year, month, day] = date.split("-");
+		// 		let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
+		// 		details["date"] = latestDate;
+		// 		return details;
+		// 	}
+		// );
+		// return this.result[this.result.length - 1];
+		// }
+	},
+	watch: {
+		cardData: function(val, oldVal) {
+			if (val !== oldVal) {
+				this.dataReady = true;
+			}
+		}
+	},
 	mounted() {
 		this.unhideGreeting();
 		this.getIsoCodes();
 	}
 };
 
-
 // console.log(Object.entries(data.result).pop());
-		// 		let dataOutput = Object.entries(data.result)
-		// 			.pop()
-		// 			.map(([date, details]) => {
-		// 				console.log(date, details);
-		// 				return [date, details];
-		// 			})
-		// 			.reduce((obj, [date, details]) => {
-		// 				obj.date = date[1];
-		// 				obj[details[0]] = details[1];
+// 		let dataOutput = Object.entries(data.result)
+// 			.pop()
+// 			.map(([date, details]) => {
+// 				console.log(date, details);
+// 				return [date, details];
+// 			})
+// 			.reduce((obj, [date, details]) => {
+// 				obj.date = date[1];
+// 				obj[details[0]] = details[1];
 
-		// 				return obj;
-		// 			}, {});
-		// 		return dataOutput;
-		// 	},
-		// 	cardData2(data = Array) {
-		// 		let output = data.map(dayObj => {
+// 				return obj;
+// 			}, {});
+// 		return dataOutput;
+// 	},
+// 	cardData2(data = Array) {
+// 		let output = data.map(dayObj => {
 
-		//         let newObj = Object.entries(dayObj)
-		//             .reduce((obj, item) => {
-		//                 obj[item[0]] = item[1];
-		//                 return obj;
-		//             }, {});
-		//         return newObj;
-		//     });
-		// return output
+//         let newObj = Object.entries(dayObj)
+//             .reduce((obj, item) => {
+//                 obj[item[0]] = item[1];
+//                 return obj;
+//             }, {});
+//         return newObj;
+//     });
+// return output
 </script>
 
 <style scoped>
-.fade-enter-active,
+.fade-enter-active {
+	transition: opacity 0.5s;
+}
 .fade-leave-active {
-	transition: opacity 1s;
+	transition: opacity 0.25s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;

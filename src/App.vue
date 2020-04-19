@@ -16,12 +16,12 @@
 				</nav>
 			</header>
 			<div class="app-content">
-				<router-view :result="flattenedDataSet" @newCountryParam="handleNewParam" />
-				<!-- <DataTable
-					:dataSet="flattenedDataSet"
-					:columns="gridColumns"
-					v-if="dataTableActive"
-				/> -->
+				<transition name="fade">
+					<router-view
+						:result="flattenedDataSet"
+						@newCountryParam="handleNewParam"
+					/>
+				</transition>
 			</div>
 			<footer class="mastfoot mt-auto">
 				<div class="inner">
@@ -33,9 +33,6 @@
 </template>
 
 <script>
-// import DataTable from "./components/DataTable";
-// import eventBus from "./components/eventBus";
-
 export default {
 	name: "app",
 	components: {
@@ -61,6 +58,7 @@ export default {
 	},
 	methods: {
 		async bigFetch() {
+			this.queryResults = "";
 			await fetch(`https://covidapi.info/api/v1/country/${this.countryParam}`)
 				.then(res => res.json())
 				.then(data => {
@@ -110,7 +108,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style >
 @import url("https://fonts.googleapis.com/css?family=Roboto+Slab:400,500,700|Ubuntu:400,500,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,600,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,500,700&display=swap");
@@ -120,9 +118,11 @@ export default {
 	font-family: "Roboto Slab", serif;
 	font-family: "Montserrat Alternates", sans-serif;
 }
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active {
 	transition: opacity 0.5s;
+}
+.fade-leave-active {
+	transition: opacity 0.25s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
@@ -153,6 +153,7 @@ html {
 }
 .app {
 	height: 100vh;
+	max-height: 800px;
 	max-width: auto;
 	padding: 0;
 	margin: auto;
@@ -163,13 +164,14 @@ html {
 	background-color: rgb(42, 42, 42);
 	text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
 	box-shadow: inset 0 0 6em rgba(0, 0, 0, 0.555);
-	overflow: auto;
+	/* overflow: auto; */
 }
 .app-body {
 	display: grid;
 	gap: 10px;
-	grid-template-rows: 1fr 8fr 1fr;
+	grid-template-rows: 1fr 11fr 40px;
 	height: 100vh;
+	max-height: 100vh;
 	max-width: 500px;
 	padding: 0;
 	margin: auto;
@@ -177,13 +179,22 @@ html {
 	color: #fff;
 	text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.548);
 }
+
+.app-content {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	max-height: 100%;
+
+	overflow: auto;
+}
 /* new */
 .cover-container {
 	display: flex;
 	justify-content: space-between;
 }
 .app-header {
-	margin: 5px 0px 15px 0px;
+	margin: 5px 0px 35px 0px;
 }
 nav {
 	margin-bottom: 35px;

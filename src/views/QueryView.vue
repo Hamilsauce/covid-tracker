@@ -1,13 +1,13 @@
 <template>
 	<div class="queryview">
 		<section class="queryview-top">
-			<h2>Select a country</h2>
+			<h4>Select a country</h4>
 			<div class="form-container">
 				<form class="queryForm">
 					<div class="formGroup">
 						<div class="selectContainer">
 							<v-select
-								placeholder="United States"
+								placeholder=""
 								v-model="v__selected"
 								label="COUNTRY"
 								:reduce="COUNTRY => COUNTRY.CODE"
@@ -33,7 +33,7 @@
 					v-model="dataReady"
 					:columns="gridColumns"
 					:dataSet="result"
-					v-if="dataTableActive"
+					v-if="dataReady"
 				/>
 			</transition>
 		</section>
@@ -142,21 +142,17 @@ export default {
 		},
 
 		result: function(value) {
-			// let flatDates = Object.entries(value).map(([date, details]) => {
-			// 	return [["date", new Date(date).toLocaleDateString()]]
-			// 		.concat(Object.entries(details))
-			// 		.reduce((obj, [prop, val]) => {
-			// 			obj[prop] = val;
-			// 			return obj;
-			// 		}, {});
-			// });
-			this.gridData = value;
-			this.cardData = value[value.length - 1];
-			this.dataReady = true;
+			if (value && this.v__selected) {
+				this.dataReady = true;
+			}
+			// this.gridData = value;
+			// this.cardData = value[value.length - 1];
 		},
 		cardData: function(val) {
 			if (val) {
-				this.showDataCard = true;
+				setTimeout(() => {
+					this.showDataCard = true;
+				}, 1000);
 			}
 		}
 	},
@@ -209,9 +205,11 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active,
+.fade-enter-active {
+	transition: opacity 0.5s;
+}
 .fade-leave-active {
-	transition: opacity 1s;
+	transition: opacity 00.25s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
@@ -223,20 +221,23 @@ export default {
 /* //* This is for formContent component */
 
 .queryview {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	display: grid;
+	grid-template-rows: 1fr 7fr;
 	/* padding: 50px; */
 	height: 100%;
 }
 .queryview-top {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
+	height: fit-content;
+}
+h4 {
+	margin: 0;
+	margin-top: 15px;
 }
 .queryview-bottom {
-	height: 100%;
-	overflow: auto;
+	height: fit-content;
 }
 /*
 .hideGreeting {

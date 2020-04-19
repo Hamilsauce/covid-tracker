@@ -4,37 +4,36 @@
 			Search <input name="query" v-model="searchQuery" />
 		</form>
 		<div>
-				<table>
-					<thead>
-						<tr>
-							<th
-								v-for="key in columns"
-								@click="sortBy(key)"
-								:key="key"
-								:class="{ active: sortKey == key }"
-							>
-								{{ key | capitalize }}
-								<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-								</span>
-							</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr
-							v-for="entry in filteredDataSet"
-							id="entry.date"
-							:key="entry.date"
-							@click="selectedRow = entry.date"
-							:class="{ hilight: selectedRow == entry.date }"
-							@dblclick="console.log(entry.date)"
+			<table>
+				<thead>
+					<tr>
+						<th
+							v-for="key in columns"
+							@click="sortBy(key)"
+							:key="key"
+							:class="{ active: sortKey == key }"
 						>
-							<td v-for="key in columns" :key="key">
-								{{ entry[key] }}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							{{ key | capitalize }}
+							<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"> </span>
+						</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr
+						v-for="entry in filteredDataSet"
+						id="entry.date"
+						:key="entry.date"
+						@click="selectedRow = entry.date"
+						:class="{ hilight: selectedRow == entry.date }"
+						@dblclick="rowDoubleClick(entry.date)"
+					>
+						<td v-for="key in columns" :key="key">
+							{{ entry[key] }}
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </template>
@@ -107,6 +106,13 @@ export default {
 		sortBy: function(key) {
 			this.sortKey = key;
 			this.sortOrders[key] = this.sortOrders[key] * -1;
+		},
+		rowDoubleClick(rowDate) {
+			console.log("dble");
+			console.log(rowDate);
+
+			let selectedDate = rowDate.toString();
+			this.searchQuery = selectedDate;
 		}
 	}
 };
@@ -235,10 +241,11 @@ td {
 	flex-direction: column;
 	justify-content: space-evenly; /**/
 	margin: auto;
-	padding: 15px 5px;
+	padding: 5px 5px;
 	width: 100%;
 	border-radius: 8px;
 	max-width: max-content;
+	z-index: 1;
 }
 
 table {
