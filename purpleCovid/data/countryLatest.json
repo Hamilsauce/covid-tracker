@@ -1,0 +1,10 @@
+{
+  "count": 1,
+  "result": {
+    "2020-04-16": {
+      "confirmed": 667801,
+      "deaths": 32917,
+      "recovered": 54703
+    }
+  }
+}
