@@ -11,8 +11,8 @@
 					<a
 						href="https://hamilsauce.github.io/covid-tracker/purpleCovid/index.html"
 						class="nav-link active"
-						>covidPurple</a
-					>
+						>covidPurple
+					</a>
 				</nav>
 			</header>
 			<div class="app-content">
@@ -86,9 +86,9 @@ export default {
 					let [year, month, day] = date.split("-");
 					let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
 					details["date"] = latestDate;
-					details.confirmed = Number(details.confirmed).toLocaleString();
-					details.deaths = Number(details.deaths).toLocaleString();
-					details.recovered = Number(details.recovered).toLocaleString();
+					details.confirmed = Number(details.confirmed);
+					details.deaths = Number(details.deaths);
+					details.recovered = Number(details.recovered);
 					return details;
 				}
 			);

@@ -111,10 +111,7 @@ export default {
 					this.options = data.codes;
 				});
 		}
-		// newCountryParam() {
-		// 	let countryParam = this.vs__selected;
-		// 	EventBus.$emit("newCountryParam", countryParam);
-		// }
+
 	},
 	computed: {
 		flattenedDataSet() {
@@ -131,22 +128,20 @@ export default {
 			);
 			return flattenedData;
 		}
-		// cardData() {
-		// 	return this.gridData[this.result.length - 1];
-		// }
+
 	},
 	watch: {
 		v__selected: function(val) {
-			this.$emit("newCountryParam", val);
-			// this.fetchTableData();
+			if (val) {
+				this.$emit("newCountryParam", val);
+			}
 		},
 
 		result: function(value) {
 			if (value && this.v__selected) {
 				this.dataReady = true;
 			}
-			// this.gridData = value;
-			// this.cardData = value[value.length - 1];
+
 		},
 		cardData: function(val) {
 			if (val) {
@@ -161,47 +156,6 @@ export default {
 		this.getIsoCodes();
 	}
 };
-
-//dataSet() {
-// 	let flattenedData = Object.entries(this.rawData.result).map(
-// 		([date, details]) => {
-// 			let [year, month, day] = date.split("-");
-// 			let latestDate = new Date(`${month}/${day}/${year}`).toLocaleDateString();
-
-// 			details["date"] = latestDate;
-// 			return details;
-// 		}
-// 	);
-// 	return flattenedData;
-// }
-
-// 	cardData(data = Array) {
-// 		console.log(Object.entries(data.result).pop());
-// 		let dataOutput = Object.entries(data.result)
-// 			.pop()
-// 			.map(([date, details]) => {
-// 				console.log(date, details);
-// 				return [date, details];
-// 			})
-// 			.reduce((obj, [date, details]) => {
-// 				obj.date = date[1];
-// 				obj[details[0]] = details[1];
-
-// 				return obj;
-// 			}, {});
-// 		return dataOutput;
-// 	},
-// 	cardData2(data = Array) {
-// 		let output = data.map(dayObj => {
-
-//         let newObj = Object.entries(dayObj)
-//             .reduce((obj, item) => {
-//                 obj[item[0]] = item[1];
-//                 return obj;
-//             }, {});
-//         return newObj;
-//     });
-// return output
 </script>
 
 <style scoped>
