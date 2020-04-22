@@ -13,6 +13,9 @@
 						class="nav-link active"
 						>covidPurple
 					</a>
+					<a href="https://hamilsauce.github.io/" class="nav-link active"
+						>hamhome
+					</a>
 				</nav>
 			</header>
 			<div class="app-content">
@@ -202,7 +205,9 @@ nav {
 
 .masthead-brand {
 	font-weight: 400;
-	font-size: 1.6em;
+	font-size: 1.8em;
+	letter-spacing: 5px;
+	text-shadow: 0 0 9px rgb(0, 0, 0);
 	color: rgba(221, 221, 221, 0.938);
 	font-family: "Ubuntu", sans-serif;
 }
@@ -267,7 +272,7 @@ nav {
 .nav-masthead .nav-link {
 	padding: 0.25rem 0;
 	font-weight: 700;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.349);
 	background-color: transparent;
 	border-bottom: 0.25rem solid transparent;
 }
@@ -282,7 +287,7 @@ nav {
 }
 
 .nav-masthead .active {
-	color: #fff;
+	color: rgba(255, 255, 255, 0.836);
 	border-bottom-color: #fff;
 }
 

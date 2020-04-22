@@ -1,6 +1,29 @@
 <template>
-  <div class="QueryForm">
-    <h2>It's about to get hot in here.</h2>
-    
-  </div>
+	<div>
+		</div>
 </template>
+
+<script>
+// import { FilterableDropDown } from "@/components/FilterableDropDown.vue";
+export default {
+	name: "name",
+	components: {
+    // FilterableDropDown
+  },
+	props: {},
+	data() {
+		return {
+			message: "message"
+		};
+	},
+	methods: {},
+	computed: {},
+	watch: {},
+	created() {},
+	mounted() {},
+	updated() {},
+	destroyed() {}
+};
+</script>
+
+<style scoped></style>
