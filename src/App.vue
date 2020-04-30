@@ -8,6 +8,12 @@
 				<nav id="nav" class="nav nav-masthead justify-content-center">
 					<router-link to="/" class="nav-link active">Home</router-link>
 					<router-link to="/QueryView" class="nav-link active">Data</router-link>
+					<!-- <router-link to="/about" class="nav-link active">Chart</router-link> -->
+					<a
+						href="https://hamilsauce.github.io/covid-tracker/src/components/data-vis/covidchart.html"
+						class="nav-link active"
+						>chart
+					</a>
 					<a
 						href="https://hamilsauce.github.io/covid-tracker/purpleCovid/index.html"
 						class="nav-link active"
